@@ -81,26 +81,50 @@ void get_list(ship** list, int n, map* map1) {
     return;
 }
 
-void insert_player(player **list, player new_player){
-    player* p_new_player = (player *)malloc(sizeof(player));
-    (*p_new_player) = new_player;
+void insert_player(player **list, player* new_player){
     if (*list == NULL) {
-        *list = p_new_player;
+        *list = new_player;
         return;
     }
     player* iteration = *list;
     while (iteration->next != NULL)
         iteration = iteration->next;
-    iteration->next = p_new_player;
+    iteration->next = new_player;
     return;
 }
 
+int search_name(player* players, char name[]) {
+    int index = 0;
+    while (players != NULL) {
+        if (strcmpi(players->name, name) == 0)
+            return index;
+        players = players->next;
+        index++;
+    }
+    return -1;
+}
+
 void setup_player(player **list) {
-    player player1;
+    player* player1 = (player*)malloc(sizeof(player ));
     fflush(stdin);
     printf("Enter your name: ");
-    gets(player1.name);
-    player1.score = 0;
+    gets(player1->name);
+
+    //to avoid similar names, we check them and add number in case of similarity
+    int index = 0;
+    char temp_name[20];
+    char temp_number[5];
+    strcpy(temp_name, player1->name);
+    while (search_name(players, temp_name) != -1) {
+        index++;
+        strcpy(temp_name, player1->name);
+        sprintf(temp_number, "%d", index);
+        strcat(temp_name, temp_number);
+    }
+    strcpy(player1->name, temp_name);
+
+    player1->score = 0;
+    player1->next = NULL;
     insert_player(list, player1);
     return;
 }
