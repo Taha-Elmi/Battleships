@@ -40,8 +40,9 @@ typedef struct {
     char name[20];
     int score;
     ship* ships;
+    map* map;
     struct player* next;
-}player;
+} player;
 extern player *players;
 
 typedef struct {

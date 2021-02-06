@@ -104,3 +104,15 @@ void setup_player(player **list) {
     insert_player(list, player1);
     return;
 }
+
+void setup_game(game* game1, player* player1, player* player2) {
+    map *map1 = (map *)malloc(sizeof(map));
+    creat_board(map1, map_size);
+    player1->map = map1;
+    get_list(&player1->ships, number_of_ships, player1->map);
+
+    map *map2 = (map *)malloc(sizeof(map));
+    creat_board(map2, map_size);
+    player2->map = map2;
+    get_list(&player2->ships, number_of_ships, player2->map);
+}
