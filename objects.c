@@ -11,15 +11,18 @@
 
 int map_size = 10;
 int number_of_ships = 10;
-int *ship_sizes;
+int *ship_sizes = NULL;
 player* players = NULL;
 
-void set_ship_sizes(int *ship_sizes, int number_of_ships, ...) {
-    ship_sizes = (int *)calloc(number_of_ships, sizeof(int ));
+void set_ship_sizes(int **ship_sizes, int number_of_ships, ...) {
+    (*ship_sizes) = (int *)calloc(number_of_ships, sizeof(int ));
+    if ((*ship_sizes) == NULL){
+        printf("Crack!");
+    }
     va_list sizes;
     va_start(sizes, number_of_ships);
     for (int i = 0; i < number_of_ships; ++i)
-        ship_sizes[i] = va_arg(sizes, int);
+        (*ship_sizes)[i] = va_arg(sizes, int);
     va_end(sizes);
 }
 
@@ -64,8 +67,10 @@ void get_ship(ship* ship1, int size, map* map1) {
     fflush(stdin);
     scanf("%s", block);
     block[1] = toupper(block[1]);
-    ship1->top_left.x = (int )block[0] - 1;
+    ship1->top_left.x = (int )block[0] - 49;
+    printf("%d\n", ship1->top_left.x);
     ship1->top_left.y = (int )block[1] - 65;
+    printf("%d\n", ship1->top_left.y);
     if (ship1->top_left.x < 0 || ship1->top_left.y < 0 || ship1->top_left.x >= map_size || ship1->top_left.y >= map_size) {
         printf("Invalid inputs :/\n");
         get_ship(ship1, size, map1);
@@ -76,8 +81,10 @@ void get_ship(ship* ship1, int size, map* map1) {
     fflush(stdin);
     scanf("%s", block);
     block[1] = toupper(block[1]);
-    ship1->bottom_right.x = (int )block[0] - 1;
+    ship1->bottom_right.x = (int )block[0] - 49;
+    printf("%d\n", ship1->bottom_right.x);
     ship1->bottom_right.y = (int )block[1] - 65;
+    printf("%d\n", ship1->bottom_right.x);
     if (ship1->bottom_right.x < 0 || ship1->bottom_right.y < 0 || ship1->bottom_right.x >= map_size || ship1->bottom_right.y >= map_size) {
         printf("Invalid inputs :/\n");
         get_ship(ship1, size, map1);
@@ -102,14 +109,14 @@ void get_ship(ship* ship1, int size, map* map1) {
     //here we check if the size of ship is correct
     switch (ship1->direction) {
         case vertical:
-            if ( (ship1->bottom_right.y - ship1->top_left.y) != size) {
+            if ( (ship1->bottom_right.y - ship1->top_left.y) != size-1) {
                 printf("The size of area is not correct.\n");
                 get_ship(ship1, size, map1);
                 return;
             }
             break;
         case horizental:
-            if ( (ship1->bottom_right.x - ship1->top_left.x) != size) {
+            if ( (ship1->bottom_right.x - ship1->top_left.x) != size-1) {
                 printf("The size of area is not correct.\n");
                 get_ship(ship1, size, map1);
                 return;
