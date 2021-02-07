@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
 
 int map_size = 10;
 int number_of_ships = 10;
@@ -27,10 +28,8 @@ void creat_board(map* map1, int size) {
     map1->board = (location **)calloc(size, sizeof(location *));
     for (int i = 0; i < size; ++i) {
         map1->board[i] = (location *)calloc(size, sizeof(location ));
-        for (int j = 0; j < size; ++j) {
-            map1->board[i][j].situation = '-';
-            map1->board[i][j].hit = unfired;
-        }
+        for (int j = 0; j < size; ++j)
+            map1->board[i][j].situation = empty;
     }
 }
 
@@ -56,14 +55,34 @@ void swap_locations (location* a, location* b) {
 
 void get_ship(ship* ship1, int size, map* map1) {
     ship1->size = size;
-    printf("Where's the ship's beginning coordinate? ");
-    scanf("%d%d", &ship1->top_left.x, &ship1->top_left.y);
-    printf("Where's the ship's tail-end coordinate? ");
-    scanf("%d%d", &ship1->bottom_right.x, &ship1->bottom_right.y);
+    char block[2];
+
+    printf("Where's the ship's beginning coordinate (example: 1a) ? ");
+    scanf("%s", block);
+    block[1] = toupper(block[1]);
+    ship1->top_left.x = (int )block[0] - 1;
+    ship1->top_left.y = (int )block[1] - 65;
+    if (ship1->top_left.x < 0 || ship1->top_left.y < 0 || ship1->top_left.x >= map_size || ship1->top_left.y >= map_size) {
+        printf("Invalid inputs :/\n");
+        get_ship(ship1, size, map1);
+        return;
+    }
+
+    printf("Where's the ship's tail-end coordinate (example: 1a) ? ");
+    scanf("%s", block);
+    block[1] = toupper(block[1]);
+    ship1->bottom_right.x = (int )block[0] - 1;
+    ship1->bottom_right.y = (int )block[1] - 65;
+    if (ship1->bottom_right.x < 0 || ship1->bottom_right.y < 0 || ship1->bottom_right.x >= map_size || ship1->bottom_right.y >= map_size) {
+        printf("Invalid inputs :/\n");
+        get_ship(ship1, size, map1);
+        return;
+    }
+
 
     //here we check if the address is valid
     if (ship1->top_left.x != ship1->bottom_right.x && ship1->top_left.y != ship1->bottom_right.y) {
-        printf("Wrong inputs :/\n");
+        printf("Wrong inputs, they must be in a straight way.\n");
         get_ship(ship1, size, map1);
         return;
     }
@@ -76,32 +95,27 @@ void get_ship(ship* ship1, int size, map* map1) {
     ship1->direction = (ship1->top_left.x == ship1->bottom_right.x) ? vertical : horizental;
 
     //here we check if the map is empty where the player chose
-    if (ship1->direction == horizental) {
-        for (int i = ship1->top_left.x; i <= ship1->bottom_right.x ; ++i) {
-            if (map1->board[i][ship1->top_left.y].situation != '-') {
-                get_ship(ship1, size, map1);
-                return;
-            }
-        }
-    } else {
-        for (int i = ship1->top_left.y; i <= ship1->bottom_right.y ; ++i) {
-            if (map1->board[ship1->top_left.x][i].situation != '-') {
+    for (int i = ship1->top_left.x - 1; i <= ship1->bottom_right.x + 1; ++i) {
+        for (int j = ship1->top_left.y - 1; j <= ship1->bottom_right.y + 1; ++j) {
+            if ((i >= 0) && (i < map_size) && (j >= 0) && (j < map_size) && (map1->board[i][j].situation != empty)) {
+                printf("The area you chose or the adjoining area was not completely empty.\n");
                 get_ship(ship1, size, map1);
                 return;
             }
         }
     }
 
+
     //here we update the map
     if (ship1->direction == horizental) {
 
         for (int i = ship1->top_left.x; i <= ship1->bottom_right.x ; ++i)
-            map1->board[i][ship1->top_left.y].situation = 'F';
+            map1->board[i][ship1->top_left.y].situation = full;
 
     } else {
 
         for (int i = ship1->top_left.y; i <= ship1->bottom_right.y ; ++i)
-            map1->board[ship1->top_left.x][i].situation = 'F';
+            map1->board[ship1->top_left.x][i].situation = full;
 
     }
 

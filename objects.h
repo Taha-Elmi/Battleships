@@ -12,14 +12,13 @@ extern int number_of_ships;
 extern int *ship_sizes;
 
 enum direction {horizental, vertical};
-enum hit {fired, unfired};
+enum situation {empty, full, Water, Explotion, Complete};
 
 typedef struct {
     int x;
     int y;
-    char situation; //it can be '-' for emptyness, 'F' for being full(both will show '-' to the opponent
-                    //or it can be 'W', 'E', 'C', which will be visible to the opponent
-    enum hit hit;
+    enum situation situation; //it can be empty or full, which will not be visible to the opponent
+                              //or it can be 'W', 'E', 'C', which will be visible to the opponent
 } location;
 
 struct ship {
