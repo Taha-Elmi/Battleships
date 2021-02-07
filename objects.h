@@ -23,6 +23,7 @@ typedef struct {
 
 struct ship {
     int size;
+    int blocks_left;
     enum direction direction;
     location top_left;
     location bottom_right;

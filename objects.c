@@ -55,9 +55,13 @@ void swap_locations (location* a, location* b) {
 
 void get_ship(ship* ship1, int size, map* map1) {
     ship1->size = size;
+    ship1->blocks_left = size;
     char block[2];
 
+    printf("Set the area of a ship with size %d\n", size);
+
     printf("Where's the ship's beginning coordinate (example: 1a) ? ");
+    fflush(stdin);
     scanf("%s", block);
     block[1] = toupper(block[1]);
     ship1->top_left.x = (int )block[0] - 1;
@@ -69,6 +73,7 @@ void get_ship(ship* ship1, int size, map* map1) {
     }
 
     printf("Where's the ship's tail-end coordinate (example: 1a) ? ");
+    fflush(stdin);
     scanf("%s", block);
     block[1] = toupper(block[1]);
     ship1->bottom_right.x = (int )block[0] - 1;
@@ -80,7 +85,7 @@ void get_ship(ship* ship1, int size, map* map1) {
     }
 
 
-    //here we check if the address is valid
+    //here we check if the points are in a straight way
     if (ship1->top_left.x != ship1->bottom_right.x && ship1->top_left.y != ship1->bottom_right.y) {
         printf("Wrong inputs, they must be in a straight way.\n");
         get_ship(ship1, size, map1);
@@ -112,7 +117,7 @@ void get_ship(ship* ship1, int size, map* map1) {
             break;
     }
 
-    //here we check if the map is empty where the player chose
+    //here we check if the area that the player chose is empty
     for (int i = ship1->top_left.x - 1; i <= ship1->bottom_right.x + 1; ++i) {
         for (int j = ship1->top_left.y - 1; j <= ship1->bottom_right.y + 1; ++j) {
             if ((i >= 0) && (i < map_size) && (j >= 0) && (j < map_size) && (map1->board[i][j].situation != empty)) {
