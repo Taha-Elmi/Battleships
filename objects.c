@@ -3,6 +3,10 @@
 //
 
 #include "objects.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
 
 int map_size = 10;
 int number_of_ships = 10;

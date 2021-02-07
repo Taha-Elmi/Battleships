@@ -6,7 +6,6 @@ int main() {
     setup_player(&players);
     setup_player(&players);
     printf("%s\n", players->name);
-    players = players->next;
-    printf("%s", players->name);
+    printf("%s", players->next->name);
     return 0;
 }
