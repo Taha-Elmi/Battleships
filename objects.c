@@ -94,6 +94,24 @@ void get_ship(ship* ship1, int size, map* map1) {
 
     ship1->direction = (ship1->top_left.x == ship1->bottom_right.x) ? vertical : horizental;
 
+    //here we check if the size of ship is correct
+    switch (ship1->direction) {
+        case vertical:
+            if ( (ship1->bottom_right.y - ship1->top_left.y) != size) {
+                printf("The size of area is not correct.\n");
+                get_ship(ship1, size, map1);
+                return;
+            }
+            break;
+        case horizental:
+            if ( (ship1->bottom_right.x - ship1->top_left.x) != size) {
+                printf("The size of area is not correct.\n");
+                get_ship(ship1, size, map1);
+                return;
+            }
+            break;
+    }
+
     //here we check if the map is empty where the player chose
     for (int i = ship1->top_left.x - 1; i <= ship1->bottom_right.x + 1; ++i) {
         for (int j = ship1->top_left.y - 1; j <= ship1->bottom_right.y + 1; ++j) {
