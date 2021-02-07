@@ -17,7 +17,8 @@ enum hit {fired, unfired};
 typedef struct {
     int x;
     int y;
-    char situation;
+    char situation; //it can be '-' for emptyness, 'F' for being full(both will show '-' to the opponent
+                    //or it can be 'W', 'E', 'C', which will be visible to the opponent
     enum hit hit;
 } location;
 

@@ -61,18 +61,50 @@ void get_ship(ship* ship1, int size, map* map1) {
     printf("Where's the ship's tail-end coordinate? ");
     scanf("%d%d", &ship1->bottom_right.x, &ship1->bottom_right.y);
 
+    //here we check if the address is valid
     if (ship1->top_left.x != ship1->bottom_right.x && ship1->top_left.y != ship1->bottom_right.y) {
         printf("Wrong inputs :/\n");
         get_ship(ship1, size, map1);
+        return;
     }
 
-    //check other errors
-
+    //here we check to set the top_left point and the bottom_right point
     if (ship1->bottom_right.x > ship1->top_left.x || ship1->bottom_right.y > ship1->top_left.y)
         swap_locations(&ship1->top_left, &ship1->bottom_right);
 
 
     ship1->direction = (ship1->top_left.x == ship1->bottom_right.x) ? vertical : horizental;
+
+    //here we check if the map is empty where the player chose
+    if (ship1->direction == horizental) {
+        for (int i = ship1->top_left.x; i <= ship1->bottom_right.x ; ++i) {
+            if (map1->board[i][ship1->top_left.y].situation != '-') {
+                get_ship(ship1, size, map1);
+                return;
+            }
+        }
+    } else {
+        for (int i = ship1->top_left.y; i <= ship1->bottom_right.y ; ++i) {
+            if (map1->board[ship1->top_left.x][i].situation != '-') {
+                get_ship(ship1, size, map1);
+                return;
+            }
+        }
+    }
+
+    //here we update the map
+    if (ship1->direction == horizental) {
+
+        for (int i = ship1->top_left.x; i <= ship1->bottom_right.x ; ++i)
+            map1->board[i][ship1->top_left.y].situation = 'F';
+
+    } else {
+
+        for (int i = ship1->top_left.y; i <= ship1->bottom_right.y ; ++i)
+            map1->board[ship1->top_left.x][i].situation = 'F';
+
+    }
+
     ship1->next = NULL;
     return;
 }
