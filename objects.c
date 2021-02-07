@@ -29,6 +29,7 @@ void creat_board(map* map1, int size) {
         map1->board[i] = (location *)calloc(size, sizeof(location ));
         for (int j = 0; j < size; ++j) {
             map1->board[i][j].situation = '-';
+            map1->board[i][j].hit = unfired;
         }
     }
 }

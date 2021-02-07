@@ -12,11 +12,13 @@ extern int number_of_ships;
 extern int *ship_sizes;
 
 enum direction {horizental, vertical};
+enum hit {fired, unfired};
 
 typedef struct {
     int x;
     int y;
     char situation;
+    enum hit hit;
 } location;
 
 struct ship {
