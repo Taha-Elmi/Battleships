@@ -7,13 +7,12 @@
 
 #endif //BATTLESHIPS_OBJECTS_H
 
-extern int map_size;
-extern int number_of_ships;
-extern int *ship_sizes;
-
+//enums
 enum direction {horizental, vertical};
 enum situation {empty, full, Water, Explotion, Complete};
 
+
+//structs
 typedef struct {
     int x;
     int y;
@@ -36,15 +35,12 @@ typedef struct {
     location **board;
 } map;
 
-struct player {
+typedef struct {
     char name[20];
     int score;
     ship* ships;
     map* map;
-};
-typedef struct player player;
-extern player *players;
-extern int number_of_players;
+} player;
 
 typedef struct {
     player player1;
@@ -55,6 +51,15 @@ typedef struct {
 } game;
 
 
+//global variables
+extern int map_size;
+extern int number_of_ships;
+extern int *ship_sizes;
+extern player *players;
+extern int number_of_players;
+
+
+//functions
 void set_ship_sizes(int **ship_sizes, int number_of_ships, ...);
 void change_ship_sizes(int **ship_sizes, int number_of_ships);
 void get_list(ship** list, int n, map* map1);
