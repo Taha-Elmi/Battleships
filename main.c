@@ -8,6 +8,9 @@ int main() {
         printf("%d\n", ship_sizes[i]);
     }
     setup_player(&players);
+    setup_player(&players);
+    printf("%s\n", players[0].name);
+    printf("%s\n", players[1].name);
     map* map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
     get_list(&(players->ships), number_of_ships, map1);

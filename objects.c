@@ -209,6 +209,21 @@ void setup_player(player **list) {
     return;
 }
 
+void swap_players(player* a, player* b) {
+    player temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sort_players(player* list) {
+    for (int i = (number_of_players - 1); i > 0 ; --i) {
+        for (int j = 0; j < i; ++j) {
+            if (list[j].score < list[j+1].score)
+                swap_players(&players[j], &players[j+1]);
+        }
+    }
+}
+
 void setup_game(game* game1, player* player1, player* player2) {
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
