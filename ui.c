@@ -15,7 +15,7 @@ void draw(map map1) {
         printf(" %c ", i + 65);
 
         for (int j = 0; j < map_size; ++j) {
-            switch (map1.board[i][j].situation) {
+            switch (map1.board[j][i].situation) {
                 case Water:
                     printf(" W ");
                     break;
@@ -44,7 +44,7 @@ void raw_draw(map map1) {
         printf(" %c ", i + 65);
 
         for (int j = 0; j < map_size; ++j) {
-            switch (map1.board[i][j].situation) {
+            switch (map1.board[j][i].situation) {
                 case full:
                     printf(" F ");
                     break;

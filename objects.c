@@ -157,7 +157,6 @@ void get_ship(ship* ship1, int size, map* map1) {
     }
 
     ship1->next = NULL;
-    return;
 }
 
 void get_list(ship** list, int n, map* map1) {
