@@ -5,7 +5,7 @@
 #include "game_loops.h"
 #include <stdio.h>
 
-void fire(map* map1, int column, char row) {
+void fire(game* game1, map* map1, int column, char row) {
     int x = column - 1;
     int y = (int )row - 65;
     switch (map1->board[x][y].situation) {
@@ -13,12 +13,13 @@ void fire(map* map1, int column, char row) {
         case Explotion:
         case Complete:
             printf("The block was already fired. Try again.\n");
-            fire(map1, column, row);
+            fire(game1, map1, column, row);
             return;
         case empty:
             map1->board[x][y].situation = Water;
             break;
         case full:
+            (game1->turn == 1) ? (game1->current_score_1++) : (game1->current_score_2++);
             map1->board[x][y].situation = Explotion;
             break;
     }

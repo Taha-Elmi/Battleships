@@ -13,6 +13,6 @@
 
 void single_player(game game1);
 void multiplayer(game game1);
-void fire(map* map1, int column, char row);
+void fire(game* game1, map* map1, int column, char row);
 void check_ships(ship** ship1, map* map1); //to convert 'E' situation to 'C' situation and update scores
 int check_finish(game game1);
