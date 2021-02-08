@@ -221,8 +221,6 @@ void setup_player(player **list) {
     (*list)[number_of_players].score = 0;
     (*list)[number_of_players].next = NULL;
     number_of_players++;
-
-    return;
 }
 
 void swap_players(player* a, player* b) {
@@ -250,4 +248,6 @@ void setup_game(game* game1, player* player1, player* player2) {
     creat_board(map2, map_size);
     player2->map = map2;
     get_list(&player2->ships, number_of_ships, player2->map);
+
+    game1->turn = 1;
 }

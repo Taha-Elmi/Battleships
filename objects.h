@@ -50,7 +50,7 @@ extern int number_of_players;
 typedef struct {
     player player1;
     player player2;
-    map board;
+    int turn;
 } game;
 
 
