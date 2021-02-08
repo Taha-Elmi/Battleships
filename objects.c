@@ -84,7 +84,7 @@ void get_ship(ship* ship1, int size, map* map1) {
     ship1->bottom_right.x = (int )block[0] - 49;
     printf("%d\n", ship1->bottom_right.x);
     ship1->bottom_right.y = (int )block[1] - 65;
-    printf("%d\n", ship1->bottom_right.x);
+    printf("%d\n", ship1->bottom_right.y);
     if (ship1->bottom_right.x < 0 || ship1->bottom_right.y < 0 || ship1->bottom_right.x >= map_size || ship1->bottom_right.y >= map_size) {
         printf("Invalid inputs :/\n");
         get_ship(ship1, size, map1);
@@ -100,7 +100,7 @@ void get_ship(ship* ship1, int size, map* map1) {
     }
 
     //here we check to set the top_left point and the bottom_right point
-    if (ship1->bottom_right.x > ship1->top_left.x || ship1->bottom_right.y > ship1->top_left.y)
+    if (ship1->bottom_right.x < ship1->top_left.x || ship1->bottom_right.y < ship1->top_left.y)
         swap_locations(&ship1->top_left, &ship1->bottom_right);
 
 
@@ -187,6 +187,7 @@ int search_name(player* players, char name[]) {
 
 void setup_player(player **list) {
     player* player1 = (player*)malloc(sizeof(player ));
+    player1->ships = NULL;
     fflush(stdin);
     printf("Enter your name: ");
     gets(player1->name);

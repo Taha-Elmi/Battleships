@@ -10,6 +10,6 @@ int main() {
     setup_player(&players);
     map* map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
-    get_list(&players->ships, number_of_ships, map1);
+    get_list(&(players->ships), number_of_ships, map1);
     return 0;
 }
