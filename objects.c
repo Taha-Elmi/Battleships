@@ -59,18 +59,16 @@ void swap_locations (location* a, location* b) {
 void get_ship(ship* ship1, int size, map* map1) {
     ship1->size = size;
     ship1->blocks_left = size;
-    char block[2];
+    short column;
+    char row;
 
     printf("Set the area of a ship with size %d\n", size);
 
     printf("Where's the ship's beginning coordinate (example: 1a) ? ");
-    fflush(stdin);
-    scanf("%s", block);
-    block[1] = toupper(block[1]);
-    ship1->top_left.x = (int )block[0] - 49;
-    printf("%d\n", ship1->top_left.x);
-    ship1->top_left.y = (int )block[1] - 65;
-    printf("%d\n", ship1->top_left.y);
+    scanf("%d%c", &column, &row);
+    row = toupper(row);
+    ship1->top_left.x = column - 1;
+    ship1->top_left.y = (int )row - 65;
     if (ship1->top_left.x < 0 || ship1->top_left.y < 0 || ship1->top_left.x >= map_size || ship1->top_left.y >= map_size) {
         printf("Invalid inputs :/\n");
         get_ship(ship1, size, map1);
@@ -78,13 +76,10 @@ void get_ship(ship* ship1, int size, map* map1) {
     }
 
     printf("Where's the ship's tail-end coordinate (example: 1a) ? ");
-    fflush(stdin);
-    scanf("%s", block);
-    block[1] = toupper(block[1]);
-    ship1->bottom_right.x = (int )block[0] - 49;
-    printf("%d\n", ship1->bottom_right.x);
-    ship1->bottom_right.y = (int )block[1] - 65;
-    printf("%d\n", ship1->bottom_right.y);
+    scanf("%d%c", &column, &row);
+    row = toupper(row);
+    ship1->bottom_right.x = column - 1;
+    ship1->bottom_right.y = (int )row - 65;
     if (ship1->bottom_right.x < 0 || ship1->bottom_right.y < 0 || ship1->bottom_right.x >= map_size || ship1->bottom_right.y >= map_size) {
         printf("Invalid inputs :/\n");
         get_ship(ship1, size, map1);
