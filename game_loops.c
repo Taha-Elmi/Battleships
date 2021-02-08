@@ -24,6 +24,43 @@ void fire(map* map1, int column, char row) {
     }
 }
 
-void multiplayer(game game1) {
+void check_ships(ship** ship1, map* map1) {
+    ship *iteration = (*ship1);
+    while (iteration != NULL) {
+        int non_hitted = iteration->size;
+        switch (iteration->direction) {
+            case horizental:
+                for (int i = iteration->top_left.x; i <= iteration->bottom_right.x ; ++i) {
+                    if (map1->board[i][iteration->top_left.y].situation == Explotion)
+                        non_hitted--;
+                }
+                break;
+            case vertical:
+                for (int i = iteration->top_left.y; i <= iteration->bottom_right.y ; ++i) {
+                    if (map1->board[iteration->top_left.x][i].situation == Explotion)
+                        non_hitted--;
+                }
+                break;
+        }
 
+        if (non_hitted == 0) {
+            for (int i = iteration->top_left.x - 1; i <= iteration->bottom_right.x + 1; ++i) {
+                for (int j = iteration->top_left.y - 1; j <= iteration->bottom_right.y + 1; ++j) {
+                    if ((i >= 0) && (i < map_size) && (j >= 0) && (j < map_size)) {
+                        if (map1->board[i][j].situation == Explotion)
+                            map1->board[i][j].situation = Complete;
+                        else
+                            map1->board[i][j].situation = Water;
+                    }
+                }
+            }
+
+            ship *delete = iteration;
+            iteration = iteration->next;
+            pop_ship(ship1, delete);
+            continue;
+        }
+
+        iteration = iteration->next;
+    }
 }

@@ -174,6 +174,7 @@ void pop_ship(ship** list, ship* ship1) {
         delete = (*list);
         (*list) = (*list)->next;
         free(delete);
+        return;
     }
 
     ship *iteration = (*list);
