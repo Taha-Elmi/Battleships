@@ -15,10 +15,10 @@ int number_of_players = 0;
 int *ship_sizes = NULL;
 player* players = NULL;
 
-void set_ship_sizes(int **ship_sizes, int number_of_ships, ...) {
+void set_ship_sizes(int **ship_sizes, ...) {
     (*ship_sizes) = (int *)calloc(number_of_ships, sizeof(int ));
     if ((*ship_sizes) == NULL){
-        printf("Crack!");
+        printf("Crack!\n");
     }
     va_list sizes;
     va_start(sizes, number_of_ships);
@@ -27,7 +27,8 @@ void set_ship_sizes(int **ship_sizes, int number_of_ships, ...) {
     va_end(sizes);
 }
 
-void change_ship_sizes(int **ship_sizes, int number_of_ships) {
+void change_ship_sizes(int **ship_sizes, int new_number_of_ships) {
+    number_of_ships = new_number_of_ships;
     (*ship_sizes) = (int *)realloc((*ship_sizes), number_of_ships * sizeof(int ));
     int input;
     for (int i = 0; i < number_of_ships; ++i) {
@@ -35,7 +36,6 @@ void change_ship_sizes(int **ship_sizes, int number_of_ships) {
         scanf("%d", &input);
         (*ship_sizes)[i] = input;
     }
-    return;
 }
 
 void creat_board(map* map1, int size) {
@@ -59,7 +59,6 @@ void insert_ship(ship **list, ship new_ship){
     while (iteration->next != NULL)
         iteration = iteration->next;
     iteration->next = p_new_ship;
-    return;
 }
 
 void swap_locations(location* a, location* b) {
@@ -165,7 +164,6 @@ void get_list(ship** list, int n, map* map1) {
         get_ship(&temp, ship_sizes[i], map1);
         insert_ship(list, temp);
     }
-    return;
 }
 
 void pop_ship(ship** list, ship* ship1) {
@@ -185,7 +183,7 @@ void pop_ship(ship** list, ship* ship1) {
     free(delete);
 }
 
-int search_name(player* players, char name[]) {
+int search_name(char name[]) {
     for (int i = 0; i < number_of_players; ++i) {
         if (strcmp(players[i].name, name) == 0)
             return i;
@@ -210,7 +208,7 @@ void setup_player(player **list) {
     char temp_name[20];
     char temp_number[5];
     strcpy(temp_name, (*list)[number_of_players].name);
-    while (search_name(players, temp_name) != -1) {
+    while (search_name(temp_name) != -1) {
         index++;
         strcpy(temp_name, (*list)[number_of_players].name);
         sprintf(temp_number, "%d", index);
