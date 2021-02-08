@@ -45,6 +45,7 @@ struct player {
 };
 typedef struct player player;
 extern player *players;
+extern int number_of_players;
 
 typedef struct {
     player player1;

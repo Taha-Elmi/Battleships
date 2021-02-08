@@ -11,6 +11,7 @@
 
 int map_size = 10;
 int number_of_ships = 10;
+int number_of_players = 0;
 int *ship_sizes = NULL;
 player* players = NULL;
 
@@ -168,52 +169,43 @@ void get_list(ship** list, int n, map* map1) {
     return;
 }
 
-void insert_player(player **list, player* new_player){
-    if (*list == NULL) {
-        *list = new_player;
-        return;
-    }
-    player* iteration = *list;
-    while (iteration->next != NULL)
-        iteration = iteration->next;
-    iteration->next = new_player;
-    return;
-}
-
 int search_name(player* players, char name[]) {
-    int index = 0;
-    while (players != NULL) {
-        if (strcmpi(players->name, name) == 0)
-            return index;
-        players = players->next;
-        index++;
+    for (int i = 0; i < number_of_players; ++i) {
+        if (strcmp(players[i].name, name) == 0)
+            return i;
     }
     return -1;
 }
 
 void setup_player(player **list) {
-    player* player1 = (player*)malloc(sizeof(player ));
-    player1->ships = NULL;
+    if ((*list) == NULL) {
+        (*list) = (player *)malloc(sizeof(player));
+    } else {
+        (*list) = (player *)realloc((*list), (number_of_players + 1) * sizeof(player));
+    }
+
+    (*list)[number_of_players].ships = NULL;
     fflush(stdin);
     printf("Enter your name: ");
-    gets(player1->name);
+    gets((*list)[number_of_players].name);
 
     //to avoid similar names, we check them and add number in case of similarity
     int index = 0;
     char temp_name[20];
     char temp_number[5];
-    strcpy(temp_name, player1->name);
+    strcpy(temp_name, (*list)[number_of_players].name);
     while (search_name(players, temp_name) != -1) {
         index++;
-        strcpy(temp_name, player1->name);
+        strcpy(temp_name, (*list)[number_of_players].name);
         sprintf(temp_number, "%d", index);
         strcat(temp_name, temp_number);
     }
-    strcpy(player1->name, temp_name);
+    strcpy((*list)[number_of_players].name, temp_name);
 
-    player1->score = 0;
-    player1->next = NULL;
-    insert_player(list, player1);
+    (*list)[number_of_players].score = 0;
+    (*list)[number_of_players].next = NULL;
+    number_of_players++;
+
     return;
 }
 
