@@ -13,3 +13,4 @@
 
 int menu();
 void draw(map map1);
+void raw_draw(map map1);

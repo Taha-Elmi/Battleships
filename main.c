@@ -15,7 +15,7 @@ int main() {
     map* map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
     get_list(&(players->ships), number_of_ships, map1);
-    draw(*map1);
+    raw_draw(*map1);
     fire(map1, 1, 'A');
     fire(map1, 2, 'A');
     draw(*map1);

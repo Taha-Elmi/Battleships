@@ -33,3 +33,26 @@ void draw(map map1) {
         printf("\n");
     }
 }
+
+void raw_draw(map map1) {
+    printf("   ");
+    for (int i = 0; i < map_size; ++i)
+        printf(" %d ", i + 1);
+    printf("\n");
+
+    for (int i = 0; i < map_size; ++i) {
+        printf(" %c ", i + 65);
+
+        for (int j = 0; j < map_size; ++j) {
+            switch (map1.board[i][j].situation) {
+                case full:
+                    printf(" F ");
+                    break;
+                default:
+                    printf(" - ");
+            }
+        }
+
+        printf("\n");
+    }
+}
