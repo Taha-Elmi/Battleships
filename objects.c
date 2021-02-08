@@ -169,6 +169,22 @@ void get_list(ship** list, int n, map* map1) {
     return;
 }
 
+void pop_ship(ship** list, ship* ship1) {
+    ship *delete;
+    if ((*list) == ship1) {
+        delete = (*list);
+        (*list) = (*list)->next;
+        free(delete);
+    }
+
+    ship *iteration = (*list);
+    while (iteration->next != ship1)
+        iteration = iteration->next;
+    delete = iteration->next;
+    iteration->next = iteration->next->next;
+    free(delete);
+}
+
 int search_name(player* players, char name[]) {
     for (int i = 0; i < number_of_players; ++i) {
         if (strcmp(players[i].name, name) == 0)
