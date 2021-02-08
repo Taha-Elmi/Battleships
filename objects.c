@@ -26,6 +26,17 @@ void set_ship_sizes(int **ship_sizes, int number_of_ships, ...) {
     va_end(sizes);
 }
 
+void change_ship_sizes(int **ship_sizes, int number_of_ships) {
+    (*ship_sizes) = (int *)realloc((*ship_sizes), number_of_ships * sizeof(int ));
+    int input;
+    for (int i = 0; i < number_of_ships; ++i) {
+        printf("Enter ship n.%d's size: ", i);
+        scanf("%d", &input);
+        (*ship_sizes)[i] = input;
+    }
+    return;
+}
+
 void creat_board(map* map1, int size) {
     map1->size = size;
     map1->board = (location **)calloc(size, sizeof(location *));
@@ -50,7 +61,7 @@ void insert_ship(ship **list, ship new_ship){
     return;
 }
 
-void swap_locations (location* a, location* b) {
+void swap_locations(location* a, location* b) {
     location temp = *a;
     *a = *b;
     *b = temp;

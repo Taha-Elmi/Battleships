@@ -54,6 +54,7 @@ typedef struct {
 
 
 void set_ship_sizes(int **ship_sizes, int number_of_ships, ...);
+void change_ship_sizes(int **ship_sizes, int number_of_ships);
 void get_list(ship** list, int n, map* map1);
 void creat_board(map* map1, int size);
 void setup_player(player **list);
