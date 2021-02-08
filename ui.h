@@ -7,7 +7,9 @@
 
 #endif //SHIPS_C_UI_H
 
+#ifndef BATTLESHIPS_OBJECTS_H
 #include "objects.h"
+#endif
 
 int menu();
 void draw(map map1);

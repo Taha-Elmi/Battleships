@@ -7,7 +7,9 @@
 
 #endif //SHIPS_C_GAME_LOOPS_H
 
+#ifndef BATTLESHIPS_OBJECTS_H
 #include "objects.h"
+#endif
 
 void single_player(game game1);
 void multiplayer(game game1);

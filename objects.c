@@ -219,7 +219,6 @@ void setup_player(player **list) {
     strcpy((*list)[number_of_players].name, temp_name);
 
     (*list)[number_of_players].score = 0;
-    (*list)[number_of_players].next = NULL;
     number_of_players++;
 }
 

@@ -2,10 +2,10 @@
 // Created by elmit on 2/5/2021.
 //
 
-#ifndef BATTLESHIPS_SHIPS_H
-#define BATTLESHIPS_SHIPS_H
+#ifndef BATTLESHIPS_OBJECTS_H
+#define BATTLESHIPS_OBJECTS_H
 
-#endif //BATTLESHIPS_SHIPS_H
+#endif //BATTLESHIPS_OBJECTS_H
 
 extern int map_size;
 extern int number_of_ships;
@@ -41,7 +41,6 @@ struct player {
     int score;
     ship* ships;
     map* map;
-    struct player* next;
 };
 typedef struct player player;
 extern player *players;

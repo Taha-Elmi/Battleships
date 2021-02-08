@@ -9,6 +9,7 @@ void draw(map map1) {
     printf("   ");
     for (int i = 0; i < map_size; ++i)
         printf(" %d ", i + 1);
+    printf("\n");
 
     for (int i = 0; i < map_size; ++i) {
         printf(" %c ", i + 65);
