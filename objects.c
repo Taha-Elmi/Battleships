@@ -15,6 +15,21 @@ int number_of_players = 0;
 int *ship_sizes = NULL;
 player* players = NULL;
 
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sort_ship_sizes() {
+    for (int i = number_of_ships; i > 0; ++i) {
+        for (int j = 0; j < i; ++j) {
+            if (ship_sizes[j] < ship_sizes[j+1])
+                swap(&ship_sizes[j], &ship_sizes[j+1]);
+        }
+    }
+}
+
 void set_ship_sizes(int **ship_sizes, ...) {
     (*ship_sizes) = (int *)calloc(number_of_ships, sizeof(int ));
     if ((*ship_sizes) == NULL){
@@ -25,6 +40,7 @@ void set_ship_sizes(int **ship_sizes, ...) {
     for (int i = 0; i < number_of_ships; ++i)
         (*ship_sizes)[i] = va_arg(sizes, int);
     va_end(sizes);
+    sort_ship_sizes();
 }
 
 void change_ship_sizes(int **ship_sizes, int new_number_of_ships) {
@@ -36,6 +52,7 @@ void change_ship_sizes(int **ship_sizes, int new_number_of_ships) {
         scanf("%d", &input);
         (*ship_sizes)[i] = input;
     }
+    sort_ship_sizes();
 }
 
 void creat_board(map* map1, int size) {

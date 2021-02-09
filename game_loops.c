@@ -65,3 +65,7 @@ void check_ships(ship** ship1, map* map1) {
         iteration = iteration->next;
     }
 }
+
+int score_of_ships () {
+    
+}
