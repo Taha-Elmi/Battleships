@@ -62,10 +62,10 @@ extern int number_of_players;
 //functions
 void set_ship_sizes(int **ship_sizes, int number_of_ships, ...);
 void change_ship_sizes(int **ship_sizes, int number_of_ships);
-void get_list(ship** list, int n, map* map1);
+void get_list(ship** list, map* map1);
 void pop_ship(ship** list, ship* ship1);
 void creat_board(map* map1, int size);
 void setup_player(player **list);
 void sort_players(player* list);
 int search_name(char name[]);
-void setup_game();
+game* setup_game(player* player1, player* player2);

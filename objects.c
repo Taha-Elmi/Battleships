@@ -3,11 +3,13 @@
 //
 
 #include "objects.h"
+#include "ui.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
+#include <windows.h>
 
 int map_size = 10;
 int number_of_ships = 10;
@@ -175,11 +177,13 @@ void get_ship(ship* ship1, int size, map* map1) {
     ship1->next = NULL;
 }
 
-void get_list(ship** list, int n, map* map1) {
-    for (int i = 0; i < n; ++i) {
+void get_list(ship** list, map* map1) {
+    for (int i = 0; i < number_of_ships; ++i) {
         ship temp;
+        raw_draw(*map1);
         get_ship(&temp, ship_sizes[i], map1);
         insert_ship(list, temp);
+        system("cls");
     }
 }
 
@@ -252,18 +256,24 @@ void sort_players(player* list) {
     }
 }
 
-void setup_game(game* game1, player* player1, player* player2) {
+game* setup_game(player* player1, player* player2) {
+    game *game1 = (game*)malloc(sizeof(game));
+
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
     player1->map = map1;
-    get_list(&player1->ships, number_of_ships, player1->map);
+    get_list(&player1->ships, player1->map);
     game1->current_score_1 = 0;
+    game1->player1 = *player1;
 
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
     player2->map = map2;
-    get_list(&player2->ships, number_of_ships, player2->map);
+    get_list(&player2->ships, player2->map);
     game1->current_score_2 = 0;
+    game1->player2 = *player2;
 
     game1->turn = 1;
+
+    return game1;
 }
