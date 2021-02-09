@@ -22,7 +22,7 @@ void swap(int *a, int *b) {
 }
 
 void sort_ship_sizes() {
-    for (int i = number_of_ships; i > 0; ++i) {
+    for (int i = number_of_ships; i > 0; --i) {
         for (int j = 0; j < i; ++j) {
             if (ship_sizes[j] < ship_sizes[j+1])
                 swap(&ship_sizes[j], &ship_sizes[j+1]);
@@ -30,7 +30,7 @@ void sort_ship_sizes() {
     }
 }
 
-void set_ship_sizes(int **ship_sizes, ...) {
+void set_ship_sizes(int **ship_sizes, int number_of_ships, ...) {
     (*ship_sizes) = (int *)calloc(number_of_ships, sizeof(int ));
     if ((*ship_sizes) == NULL){
         printf("Crack!\n");

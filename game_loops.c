@@ -25,7 +25,12 @@ void fire(game* game1, map* map1, int column, char row) {
     }
 }
 
-void check_ships(ship** ship1, map* map1) {
+int score_of_ships (int ship_size) {
+    int max_score = 5 * ship_sizes[0];
+    return (max_score / ship_size);
+}
+
+void check_ships(game *game1, ship** ship1, map* map1) {
     ship *iteration = (*ship1);
     while (iteration != NULL) {
         int non_hitted = iteration->size;
@@ -44,6 +49,8 @@ void check_ships(ship** ship1, map* map1) {
                 break;
         }
 
+
+        //if the ship is completely destroyed
         if (non_hitted == 0) {
             for (int i = iteration->top_left.x - 1; i <= iteration->bottom_right.x + 1; ++i) {
                 for (int j = iteration->top_left.y - 1; j <= iteration->bottom_right.y + 1; ++j) {
@@ -56,6 +63,11 @@ void check_ships(ship** ship1, map* map1) {
                 }
             }
 
+            //give the score of destroying
+            int destroyed_area = iteration->size;
+            (game1->turn == 1) ? (game1->current_score_1 += score_of_ships(destroyed_area)) : (game1->current_score_2 += score_of_ships(destroyed_area));
+
+            //remove the ship from linked list
             ship *delete = iteration;
             iteration = iteration->next;
             pop_ship(ship1, delete);
@@ -64,8 +76,4 @@ void check_ships(ship** ship1, map* map1) {
 
         iteration = iteration->next;
     }
-}
-
-int score_of_ships () {
-    
 }

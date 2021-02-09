@@ -7,7 +7,7 @@
 
 
 int main() {
-    set_ship_sizes(&ship_sizes, 5, 3, 3, 2, 2, 2, 1, 1, 1, 1);
+    set_ship_sizes(&ship_sizes, 10, 2, 3, 3, 2, 5, 2, 1, 1, 1, 1);
     for (int i = 0; i < 10; ++i) {
         printf("%d\n", ship_sizes[i]);
     }
@@ -18,10 +18,11 @@ int main() {
 
     raw_draw(*map1);
 
-    for (int i = 0; i < 5; ++i) {
+    printf("%d\n", score_of_ships(3));
+    /*for (int i = 0; i < 5; ++i) {
         fire(map1, 1, (char )(i + 65));
         check_ships( &(players->ships) , map1);
         draw(*map1);
-    }
+    }*/
     return 0;
 }
