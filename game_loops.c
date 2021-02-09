@@ -3,17 +3,39 @@
 //
 
 #include "game_loops.h"
+#include "ui.h"
 #include <stdio.h>
+#include <ctype.h>
 
-void fire(game* game1, map* map1, int column, char row) {
+int valid_input(int column, char row) {
+    row = toupper(row);
+    row -= 64;
+    if (column == -1 || column == -2)
+        return column;
+    if (column < 1 || column > map_size
+        || row < 1 || row > map_size) {
+        printf("Invalid input\n");
+        return 0;
+    }
+}
+
+void fire(game* game1, map* map1) {
+    short column;
+    char row;
+
+    printf("Fire a block (example: 1a) : ");
+    scanf("%d%c", &column, &row);
+    row = toupper(row);
+
     int x = column - 1;
     int y = (int )row - 65;
+
     switch (map1->board[x][y].situation) {
         case Water:
         case Explotion:
         case Complete:
             printf("The block was already fired. Try again.\n");
-            fire(game1, map1, column, row);
+            fire(game1, map1);
             return;
         case empty:
             map1->board[x][y].situation = Water;
@@ -77,3 +99,83 @@ void check_ships(game *game1, ship** ship1, map* map1) {
         iteration = iteration->next;
     }
 }
+
+int check_end(game* game1) {
+    if (game1->player1.ships == NULL)
+        return 2;
+    if (game1->player2.ships == NULL)
+        return 1;
+    return 0;
+}
+
+void finish_game(game* game1, int winner) {
+
+}
+
+void multiplayer_round (game* game1) {
+    short column;
+    char row;
+
+    if (game1->turn == 1) {
+
+        draw(*game1->player2.map);
+        printf("%s, your turn : ", game1->player1.name);
+        scanf("%d%c", &column, &row);
+
+        int input = valid_input(column, row);
+        if (input == -1) {
+
+            return;
+        }
+        if (input == -2) {
+
+            return;
+        }
+        if (input == 0){
+            printf("Invalid input. Choose a block or use jet power or save the game\n");
+            multiplayer_round(game1);
+            return;
+        }
+
+        fire(game1, game1->player2.map);
+        check_ships(game1, &game1->player2.ships, game1->player2.map);
+        draw(*game1->player2.map);
+        int end = check_end(game1);
+        if (end) {
+            finish_game(game1, end);
+            return;
+        }
+        game1->turn = 2;
+    } else {
+
+        draw(*game1->player1.map);
+        printf("%s, your turn : ", game1->player1.name);
+        scanf("%d%c", &column, &row);
+
+        int input = valid_input(column, row);
+        if (input == -1) {
+
+            return;
+        }
+        if (input == -2) {
+
+            return;
+        }
+        if (input == 0){
+            printf("Invalid input. Choose a block or use jet power or save the game\n");
+            multiplayer_round(game1);
+            return;
+        }
+
+        fire(game1, game1->player1.map);
+        check_ships(game1, &game1->player1.ships, game1->player1.map);
+        draw(*game1->player1.map);
+        int end = check_end(game1);
+        if (end) {
+            finish_game(game1, end);
+            return;
+        }
+        game1->turn = 1;
+    }
+}
+
