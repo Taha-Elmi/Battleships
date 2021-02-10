@@ -103,7 +103,21 @@ int check_end(game* game1) {
 }
 
 void finish_game(game* game1, int winner) {
-
+    system("cls");
+    if (winner == 1) {
+        printf("%s won the game :)\n", game1->player1->name);
+        game1->player1->score += game1->current_score_1;
+        game1->player2->score += (game1->current_score_2 / 2);
+    } else {
+        printf("%s won the game :)\n", game1->player1->name);
+        game1->player2->score += game1->current_score_2;
+        game1->player1->score += (game1->current_score_2 / 2);
+    }
+    free(game1->player1->ships);
+    game1->player1->ships = NULL;
+    free(game1->player2->ships);
+    game1->player2->ships = NULL;
+    free(game1);
 }
 
 void multiplayer_round (game* game1) {
@@ -139,11 +153,6 @@ void multiplayer_round (game* game1) {
         draw(*game1->player2->map);
         Sleep(2000);
 
-        int end = check_end(game1);
-        if (end) {
-            finish_game(game1, end);
-            return;
-        }
         game1->turn = 2;
     } else {
 
@@ -174,12 +183,15 @@ void multiplayer_round (game* game1) {
         draw(*game1->player1->map);
         Sleep(2000);
 
-        int end = check_end(game1);
-        if (end) {
-            finish_game(game1, end);
-            return;
-        }
         game1->turn = 1;
     }
 }
 
+void multiplayer(game* game1) {
+    int end = 0;
+    while (end == 0) {
+        multiplayer_round(game1);
+        end = check_end(game1);
+    }
+    finish_game(game1, end);
+}

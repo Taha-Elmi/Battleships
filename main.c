@@ -7,13 +7,10 @@
 
 
 int main() {
-    set_ship_sizes(&ship_sizes, 3, 6, 4, 3);
+    set_ship_sizes(&ship_sizes, 3, 5, 4, 3);
     setup_player(&players);
     setup_player(&players);
     game *game1 = setup_game(&players[0], &players[1]);
-
-    for (int i = 0; i < 4; ++i) {
-        multiplayer_round(game1);
-    }
+    multiplayer(game1);
     return 0;
 }
