@@ -151,6 +151,7 @@ void multiplayer_round (game* game1) {
         draw(*game1->player1->map);
         printf("%s, your turn : ", game1->player2->name);
         scanf("%d%c", &column, &row);
+        row = toupper(row);
 
         int input = valid_input(column, row);
         if (input == -1) {
