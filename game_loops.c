@@ -6,9 +6,9 @@
 #include "ui.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <windows.h>
 
 int valid_input(int column, char row) {
-    row = toupper(row);
     row -= 64;
     if (column == -1 || column == -2)
         return column;
@@ -19,13 +19,7 @@ int valid_input(int column, char row) {
     }
 }
 
-void fire(game* game1, map* map1) {
-    short column;
-    char row;
-
-    printf("Fire a block (example: 1a) : ");
-    scanf("%d%c", &column, &row);
-    row = toupper(row);
+void fire(game* game1, map* map1, int column, char row) {
 
     int x = column - 1;
     int y = (int )row - 65;
@@ -35,7 +29,7 @@ void fire(game* game1, map* map1) {
         case Explotion:
         case Complete:
             printf("The block was already fired. Try again.\n");
-            fire(game1, map1);
+            fire(game1, map1, column, row);
             return;
         case empty:
             map1->board[x][y].situation = Water;
@@ -118,9 +112,11 @@ void multiplayer_round (game* game1) {
 
     if (game1->turn == 1) {
 
+        system("cls");
         draw(*game1->player2.map);
         printf("%s, your turn : ", game1->player1.name);
         scanf("%d%c", &column, &row);
+        row = toupper(row);
 
         int input = valid_input(column, row);
         if (input == -1) {
@@ -137,9 +133,12 @@ void multiplayer_round (game* game1) {
             return;
         }
 
-        fire(game1, game1->player2.map);
+        fire(game1, game1->player2.map, column, row);
         check_ships(game1, &game1->player2.ships, game1->player2.map);
+        system("cls");
         draw(*game1->player2.map);
+        Sleep(2000);
+
         int end = check_end(game1);
         if (end) {
             finish_game(game1, end);
@@ -148,8 +147,9 @@ void multiplayer_round (game* game1) {
         game1->turn = 2;
     } else {
 
+        system("cls");
         draw(*game1->player1.map);
-        printf("%s, your turn : ", game1->player1.name);
+        printf("%s, your turn : ", game1->player2.name);
         scanf("%d%c", &column, &row);
 
         int input = valid_input(column, row);
@@ -167,9 +167,12 @@ void multiplayer_round (game* game1) {
             return;
         }
 
-        fire(game1, game1->player1.map);
+        fire(game1, game1->player1.map, column, row);
         check_ships(game1, &game1->player1.ships, game1->player1.map);
+        system("cls");
         draw(*game1->player1.map);
+        Sleep(2000);
+
         int end = check_end(game1);
         if (end) {
             finish_game(game1, end);

@@ -32,14 +32,15 @@ void sort_ship_sizes() {
     }
 }
 
-void set_ship_sizes(int **ship_sizes, int number_of_ships, ...) {
-    (*ship_sizes) = (int *)calloc(number_of_ships, sizeof(int ));
+void set_ship_sizes(int **ship_sizes, int count, ...) {
+    number_of_ships = count;
+    (*ship_sizes) = (int *)calloc(count, sizeof(int ));
     if ((*ship_sizes) == NULL){
         printf("Crack!\n");
     }
     va_list sizes;
-    va_start(sizes, number_of_ships);
-    for (int i = 0; i < number_of_ships; ++i)
+    va_start(sizes, count);
+    for (int i = 0; i < count; ++i)
         (*ship_sizes)[i] = va_arg(sizes, int);
     va_end(sizes);
     sort_ship_sizes();
@@ -95,8 +96,14 @@ void get_ship(ship* ship1, int size, map* map1) {
     printf("Set the area of a ship with size %d\n", size);
 
     printf("Where's the ship's beginning coordinate (example: 1a) ? ");
+    fflush(stdin);
     scanf("%d%c", &column, &row);
     row = toupper(row);
+    if (isalpha(row) == 0) {
+        printf("Invalid input :/ Try again\n");
+        get_ship(ship1, size, map1);
+        return;
+    }
     ship1->top_left.x = column - 1;
     ship1->top_left.y = (int )row - 65;
     if (ship1->top_left.x < 0 || ship1->top_left.y < 0 || ship1->top_left.x >= map_size || ship1->top_left.y >= map_size) {
@@ -108,6 +115,11 @@ void get_ship(ship* ship1, int size, map* map1) {
     printf("Where's the ship's tail-end coordinate (example: 1a) ? ");
     scanf("%d%c", &column, &row);
     row = toupper(row);
+    if (isalpha(row) == 0) {
+        printf("Invalid input :/ Try again\n");
+        get_ship(ship1, size, map1);
+        return;
+    }
     ship1->bottom_right.x = column - 1;
     ship1->bottom_right.y = (int )row - 65;
     if (ship1->bottom_right.x < 0 || ship1->bottom_right.y < 0 || ship1->bottom_right.x >= map_size || ship1->bottom_right.y >= map_size) {
