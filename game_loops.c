@@ -118,11 +118,22 @@ void finish_game(game* game1, int winner) {
         game1->player2->score += game1->current_score_2;
         game1->player1->score += (game1->current_score_2 / 2);
     }
+    free(game1->player1->map);
     free(game1->player1->ships);
     game1->player1->ships = NULL;
+    game1->player1->map = NULL;
+    free(game1->player2->map);
     free(game1->player2->ships);
+    game1->player2->map = NULL;
     game1->player2->ships = NULL;
+
+    if (game1->game_mode == single)
+        free(game1->player2);
+
     free(game1);
+
+    printf("\nPress any key to exit");
+    getch();
 }
 
 void multiplayer_round (game* game1) {
@@ -158,7 +169,6 @@ void multiplayer_round (game* game1) {
         system("cls");
         display_scores(game1);
         draw(*game1->player2->map);
-        getch();
 
         game1->turn = 2;
     } else {
@@ -190,10 +200,10 @@ void multiplayer_round (game* game1) {
         system("cls");
         display_scores(game1);
         draw(*game1->player1->map);
-        getch();
 
         game1->turn = 1;
     }
+    Sleep(1500);
 }
 
 void multiplayer(game* game1) {
@@ -215,6 +225,41 @@ int is_E(map map1, location* E) {
         }
     }
     return 0;
+}
+
+location clever_pickup(map map1, location guess) {
+    enum direction guess_direction;
+    if ((guess.y - 1 >= 0 && map1.board[guess.x][guess.y - 1].situation == Explotion)
+        || (guess.y + 1 < map_size && map1.board[guess.x][guess.y + 1].situation == Explotion))
+        guess_direction = vertical;
+    else if ((guess.x - 1 >= 0 && map1.board[guess.x - 1][guess.y].situation != Water)
+             || (guess.x + 1 < map_size && map1.board[guess.x + 1][guess.y].situation != Water))
+        guess_direction = horizental;
+    else
+        guess_direction = vertical;
+
+    switch (guess_direction) {
+        case horizental:
+            while (guess.x + 1 < map_size
+                && map1.board[guess.x + 1][guess.y].situation == Explotion)
+                guess.x ++;
+            if (guess.x + 1 < map_size && map1.board[guess.x + 1][guess.y].situation != Water) {
+                guess.x ++;
+                return guess;
+            }
+            while (map1.board[--guess.x][guess.y].situation == Explotion);
+            return guess;
+        case vertical:
+            while (guess.y + 1 < map_size
+                   && map1.board[guess.x][guess.y + 1].situation == Explotion)
+                guess.y ++;
+            if (guess.y + 1 < map_size && map1.board[guess.x][guess.y + 1].situation != Water) {
+                guess.y ++;
+                return guess;
+            }
+            while (map1.board[guess.x][--guess.y].situation == Explotion);
+            return guess;
+    }
 }
 
 void single_player_round(game* game1) {
@@ -250,15 +295,35 @@ void single_player_round(game* game1) {
         system("cls");
         display_scores(game1);
         draw(*game1->player2->map);
-        getch();
 
         game1->turn = 2;
     } else {
         location guess;
         if (is_E(*game1->player1->map, &guess)) {
-
-
-
+            guess = clever_pickup(*game1->player1->map, guess);
+        } else {
+            do {
+                guess.x = random(0, map_size - 1);
+                guess.y = random(0, map_size - 1);
+            } while (game1->player1->map->board[guess.x][guess.y].situation != empty
+                    && game1->player1->map->board[guess.x][guess.y].situation != full);
         }
+        fire(game1, game1->player1->map, guess.x + 1, (char )(guess.y + 65));
+        check_ships(game1, &game1->player1->ships, game1->player1->map);
+        system("cls");
+        display_scores(game1);
+        draw(*game1->player1->map);
+
+        game1->turn = 1;
     }
+    Sleep(1500);
+}
+
+void single_player(game* game1) {
+    int end = 0;
+    while (end == 0) {
+        single_player_round(game1);
+        end = check_end(game1);
+    }
+    finish_game(game1, end);
 }

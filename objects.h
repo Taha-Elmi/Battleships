@@ -73,3 +73,4 @@ void sort_players(player* list);
 int search_name(char name[]);
 game* setup_multi_game(player* player1, player* player2);
 game* setup_single_game(player* player1);
+int random(int lower, int upper);

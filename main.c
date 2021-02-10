@@ -12,8 +12,6 @@ int main() {
     srand(time(NULL));
     setup_player(&players);
     game * game1 = setup_single_game(players);
-    raw_draw(*game1->player1->map);
-    printf("\nBot:\n\n");
-    raw_draw(*game1->player2->map);
+    single_player(game1);
     return 0;
 }
