@@ -205,6 +205,60 @@ void multiplayer(game* game1) {
     finish_game(game1, end);
 }
 
-void single_player_round(game* game1) {
+int is_E(map map1, location* E) {
+    for (int i = 0; i < map_size; ++i) {
+        for (int j = 0; j < map_size; ++j) {
+            if (map1.board[i][j].situation == Explotion) {
+                *E = map1.board[i][j];
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 
+void single_player_round(game* game1) {
+    short column;
+    char row;
+
+    if (game1->turn == 1) {
+
+        system("cls");
+        display_scores(game1);
+        draw(*game1->player2->map);
+        printf("%s, your turn : ", game1->player1->name);
+        scanf("%d%c", &column, &row);
+        row = toupper(row);
+
+        int input = valid_input(column, row);
+        if (input == -1) {
+
+            return;
+        }
+        if (input == -2) {
+
+            return;
+        }
+        if (input == 0){
+            printf("Invalid input. Choose a block or use jet power or save the game\n");
+            multiplayer_round(game1);
+            return;
+        }
+
+        fire(game1, game1->player2->map, column, row);
+        check_ships(game1, &game1->player2->ships, game1->player2->map);
+        system("cls");
+        display_scores(game1);
+        draw(*game1->player2->map);
+        getch();
+
+        game1->turn = 2;
+    } else {
+        location guess;
+        if (is_E(*game1->player1->map, &guess)) {
+
+
+
+        }
+    }
 }
