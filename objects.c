@@ -414,14 +414,17 @@ game* setup_single_game(player* player1) {
     player1->map = map1;
     game1->current_score_1 = 0;
     game1->player1 = player1;
-    get_list(&player1->ships, player1->map);
+    auto_get_list(&player1->ships, player1->map);
 
     bot = (player*)malloc(sizeof(player));
+    strcpy(bot->name, "Bot");
+    bot->ships = NULL;
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
     bot->map = map2;
     game1->current_score_2 = 0;
     game1->player2 = bot;
+    auto_get_list(&bot->ships, bot->map);
 
 
     game1->turn = 1;
