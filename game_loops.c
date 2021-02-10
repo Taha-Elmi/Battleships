@@ -204,3 +204,7 @@ void multiplayer(game* game1) {
     }
     finish_game(game1, end);
 }
+
+void single_player_round(game* game1) {
+
+}

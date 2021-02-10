@@ -16,11 +16,17 @@ int number_of_ships = 10;
 int number_of_players = 0;
 int *ship_sizes = NULL;
 player* players = NULL;
+player* bot = NULL;
 
 void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
     *b = temp;
+}
+
+int random(int lower, int upper) {
+    int n = rand() % (upper - lower + 1) + lower;
+    return n;
 }
 
 void sort_ship_sizes() {
@@ -89,7 +95,6 @@ void swap_locations(location* a, location* b) {
 
 void get_ship(ship* ship1, int size, map* map1) {
     ship1->size = size;
-    ship1->blocks_left = size;
     short column;
     char row;
 
@@ -199,6 +204,115 @@ void get_list(ship** list, map* map1) {
     }
 }
 
+void auto_get_ship(ship* ship1, int size, map* map1) {
+    ship1->size = size;
+
+    int rand_result = random(0, 1);
+    (rand_result == 0) ? (ship1->direction = vertical) : (ship1->direction = horizental);
+
+    //if the size is larger than half of the map_size, then we put it on the border
+    if (size > (map_size / 2)) {
+        rand_result = random(0, 1); //to decide to put it on upper/left axis or on lower/right axis
+        if (rand_result == 0) {
+
+            rand_result = random(0, map_size - size);
+
+            switch (ship1->direction) {
+                case vertical:
+                    ship1->top_left.x = 0;
+                    ship1->top_left.y = rand_result;
+                    ship1->bottom_right.x = 0;
+                    ship1->bottom_right.y = (rand_result + size - 1);
+                    break;
+                case horizental:
+                    ship1->top_left.x = rand_result;
+                    ship1->top_left.y = 0;
+                    ship1->bottom_right.x = (rand_result + size - 1);
+                    ship1->bottom_right.y = 0;
+                    break;
+            }
+        } else {
+
+            rand_result = random(0, map_size - size);
+
+            switch (ship1->direction) {
+                case vertical:
+                    ship1->top_left.x = map_size - 1;
+                    ship1->top_left.y = rand_result;
+                    ship1->bottom_right.x = map_size - 1;
+                    ship1->bottom_right.y = (rand_result + size - 1);
+                    break;
+                case horizental:
+                    ship1->top_left.x = rand_result;
+                    ship1->top_left.y = map_size - 1;
+                    ship1->bottom_right.x = (rand_result + size - 1);
+                    ship1->bottom_right.y = map_size - 1;
+                    break;
+            }
+        }
+    } else { //size < (map_size / 2)
+
+        switch (ship1->direction) {
+            case vertical:
+
+                rand_result = random(0, map_size - 1);
+                ship1->top_left.x = rand_result;
+                ship1->bottom_right.x = rand_result;
+
+                rand_result = random(0, map_size - size);
+                ship1->top_left.y = rand_result;
+                ship1->bottom_right.y = rand_result + size - 1;
+
+                break;
+
+            case horizental:
+
+                rand_result = random(0, map_size - 1);
+                ship1->top_left.y = rand_result;
+                ship1->bottom_right.y = rand_result;
+
+                rand_result = random(0, map_size - size);
+                ship1->top_left.x = rand_result;
+                ship1->bottom_right.x = rand_result + size - 1;
+
+                break;
+        }
+    }
+
+    //here we check if the area is empty
+    for (int i = ship1->top_left.x - 1; i <= ship1->bottom_right.x + 1; ++i) {
+        for (int j = ship1->top_left.y - 1; j <= ship1->bottom_right.y + 1; ++j) {
+            if ((i >= 0) && (i < map_size) && (j >= 0) && (j < map_size) && (map1->board[i][j].situation != empty)) {
+                auto_get_ship(ship1, size, map1);
+                return;
+            }
+        }
+    }
+
+    //here we update the map
+    switch (ship1->direction) {
+        case horizental:
+            for (int i = ship1->top_left.x; i <= ship1->bottom_right.x ; ++i)
+                map1->board[i][ship1->top_left.y].situation = full;
+            break;
+
+        case vertical:
+            for (int i = ship1->top_left.y; i <= ship1->bottom_right.y ; ++i)
+                map1->board[ship1->top_left.x][i].situation = full;
+            break;
+    }
+
+    ship1->next = NULL;
+}
+
+void auto_get_list(ship** list, map* map1) {
+    for (int i = 0; i < number_of_ships; ++i) {
+        ship temp;
+        auto_get_ship(&temp, ship_sizes[i], map1);
+        insert_ship(list, temp);
+    }
+}
+
 void pop_ship(ship** list, ship* ship1) {
     ship *delete;
     if ((*list) == ship1) {
@@ -268,22 +382,47 @@ void sort_players(player* list) {
     }
 }
 
-game* setup_game(player* player1, player* player2) {
+game* setup_multi_game(player* player1, player* player2) {
     game *game1 = (game*)malloc(sizeof(game));
+    game1->game_mode = multi;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
     player1->map = map1;
-    get_list(&player1->ships, player1->map);
     game1->current_score_1 = 0;
     game1->player1 = player1;
+    get_list(&player1->ships, player1->map);
 
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
     player2->map = map2;
-    get_list(&player2->ships, player2->map);
     game1->current_score_2 = 0;
     game1->player2 = player2;
+    get_list(&player2->ships, player2->map);
+
+    game1->turn = 1;
+
+    return game1;
+}
+
+game* setup_single_game(player* player1) {
+    game *game1 = (game*)malloc(sizeof(game));
+    game1->game_mode = single;
+
+    map *map1 = (map *)malloc(sizeof(map));
+    creat_board(map1, map_size);
+    player1->map = map1;
+    game1->current_score_1 = 0;
+    game1->player1 = player1;
+    get_list(&player1->ships, player1->map);
+
+    bot = (player*)malloc(sizeof(player));
+    map *map2 = (map *)malloc(sizeof(map));
+    creat_board(map2, map_size);
+    bot->map = map2;
+    game1->current_score_2 = 0;
+    game1->player2 = bot;
+
 
     game1->turn = 1;
 

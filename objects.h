@@ -10,6 +10,7 @@
 //enums
 enum direction {horizental, vertical};
 enum situation {empty, full, Water, Explotion, Complete};
+enum game_mode {single, multi};
 
 
 //structs
@@ -22,7 +23,6 @@ typedef struct {
 
 struct ship {
     int size;
-    int blocks_left;
     enum direction direction;
     location top_left;
     location bottom_right;
@@ -43,6 +43,7 @@ typedef struct {
 } player;
 
 typedef struct {
+    enum game_mode game_mode;
     player* player1;
     int current_score_1;
     player* player2;
@@ -55,17 +56,20 @@ typedef struct {
 extern int map_size;
 extern int number_of_ships;
 extern int *ship_sizes;
-extern player *players;
 extern int number_of_players;
+extern player *players;
+extern player *bot;
 
 
 //functions
 void set_ship_sizes(int **ship_sizes, int number_of_ships, ...);
 void change_ship_sizes(int **ship_sizes, int number_of_ships);
 void get_list(ship** list, map* map1);
+void auto_get_list(ship** list, map* map1);
 void pop_ship(ship** list, ship* ship1);
 void creat_board(map* map1, int size);
 void setup_player(player **list);
 void sort_players(player* list);
 int search_name(char name[]);
-game* setup_game(player* player1, player* player2);
+game* setup_multi_game(player* player1, player* player2);
+game* setup_single_game(player* player1);
