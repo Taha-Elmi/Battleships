@@ -69,8 +69,11 @@ void creat_board(map* map1, int size) {
     map1->board = (location **)calloc(size, sizeof(location *));
     for (int i = 0; i < size; ++i) {
         map1->board[i] = (location *)calloc(size, sizeof(location ));
-        for (int j = 0; j < size; ++j)
+        for (int j = 0; j < size; ++j) {
+            map1->board[i][j].x = i;
+            map1->board[i][j].y = j;
             map1->board[i][j].situation = empty;
+        }
     }
 }
 

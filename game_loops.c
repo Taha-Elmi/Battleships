@@ -228,6 +228,7 @@ int is_E(map map1, location* E) {
 }
 
 location clever_pickup(map map1, location guess) {
+    //define the direction
     enum direction guess_direction;
     if ((guess.y - 1 >= 0 && map1.board[guess.x][guess.y - 1].situation == Explotion)
         || (guess.y + 1 < map_size && map1.board[guess.x][guess.y + 1].situation == Explotion))
@@ -238,6 +239,7 @@ location clever_pickup(map map1, location guess) {
     else
         guess_direction = vertical;
 
+    //decide a block
     switch (guess_direction) {
         case horizental:
             while (guess.x + 1 < map_size
