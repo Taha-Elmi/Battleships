@@ -43,9 +43,9 @@ typedef struct {
 } player;
 
 typedef struct {
-    player player1;
+    player* player1;
     int current_score_1;
-    player player2;
+    player* player2;
     int current_score_2;
     int turn;
 } game;

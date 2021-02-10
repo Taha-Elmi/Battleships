@@ -95,9 +95,9 @@ void check_ships(game *game1, ship** ship1, map* map1) {
 }
 
 int check_end(game* game1) {
-    if (game1->player1.ships == NULL)
+    if (game1->player1->ships == NULL)
         return 2;
-    if (game1->player2.ships == NULL)
+    if (game1->player2->ships == NULL)
         return 1;
     return 0;
 }
@@ -113,8 +113,8 @@ void multiplayer_round (game* game1) {
     if (game1->turn == 1) {
 
         system("cls");
-        draw(*game1->player2.map);
-        printf("%s, your turn : ", game1->player1.name);
+        draw(*game1->player2->map);
+        printf("%s, your turn : ", game1->player1->name);
         scanf("%d%c", &column, &row);
         row = toupper(row);
 
@@ -133,10 +133,10 @@ void multiplayer_round (game* game1) {
             return;
         }
 
-        fire(game1, game1->player2.map, column, row);
-        check_ships(game1, &game1->player2.ships, game1->player2.map);
+        fire(game1, game1->player2->map, column, row);
+        check_ships(game1, &game1->player2->ships, game1->player2->map);
         system("cls");
-        draw(*game1->player2.map);
+        draw(*game1->player2->map);
         Sleep(2000);
 
         int end = check_end(game1);
@@ -148,8 +148,8 @@ void multiplayer_round (game* game1) {
     } else {
 
         system("cls");
-        draw(*game1->player1.map);
-        printf("%s, your turn : ", game1->player2.name);
+        draw(*game1->player1->map);
+        printf("%s, your turn : ", game1->player2->name);
         scanf("%d%c", &column, &row);
 
         int input = valid_input(column, row);
@@ -167,10 +167,10 @@ void multiplayer_round (game* game1) {
             return;
         }
 
-        fire(game1, game1->player1.map, column, row);
-        check_ships(game1, &game1->player1.ships, game1->player1.map);
+        fire(game1, game1->player1->map, column, row);
+        check_ships(game1, &game1->player1->ships, game1->player1->map);
         system("cls");
-        draw(*game1->player1.map);
+        draw(*game1->player1->map);
         Sleep(2000);
 
         int end = check_end(game1);

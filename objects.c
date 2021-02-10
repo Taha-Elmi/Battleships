@@ -276,14 +276,14 @@ game* setup_game(player* player1, player* player2) {
     player1->map = map1;
     get_list(&player1->ships, player1->map);
     game1->current_score_1 = 0;
-    game1->player1 = *player1;
+    game1->player1 = player1;
 
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
     player2->map = map2;
     get_list(&player2->ships, player2->map);
     game1->current_score_2 = 0;
-    game1->player2 = *player2;
+    game1->player2 = player2;
 
     game1->turn = 1;
 
