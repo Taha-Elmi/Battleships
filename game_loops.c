@@ -9,15 +9,16 @@
 #include <windows.h>
 #include <conio.h>
 
-int valid_input(int column, char row) {
+int valid_input(int column, char row, map map1) {
     row -= 64;
     if (column == -1 || column == -2)
         return column;
-    if (column < 1 || column > map_size
-        || row < 1 || row > map_size) {
-        printf("Invalid input\n");
-        return 0;
-    }
+    if (column > 0 && column <= map_size
+        && row > 0 && row <= map_size
+        && (map1.board[column - 1][row - 1].situation == empty
+        || map1.board[column - 1][row - 1].situation == full))
+        return 1;
+    return 0;
 }
 
 void fire(game* game1, map* map1, int column, char row) {
@@ -30,7 +31,6 @@ void fire(game* game1, map* map1, int column, char row) {
         case Explotion:
         case Complete:
             printf("The block was already fired. Try again.\n");
-            fire(game1, map1, column, row);
             return;
         case empty:
             map1->board[x][y].situation = Water;
@@ -149,7 +149,7 @@ void multiplayer_round (game* game1) {
         scanf("%d%c", &column, &row);
         row = toupper(row);
 
-        int input = valid_input(column, row);
+        int input = valid_input(column, row, *game1->player2->map);
         if (input == -1) {
 
             return;
@@ -160,6 +160,7 @@ void multiplayer_round (game* game1) {
         }
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
+            Sleep(1500);
             multiplayer_round(game1);
             return;
         }
@@ -180,7 +181,7 @@ void multiplayer_round (game* game1) {
         scanf("%d%c", &column, &row);
         row = toupper(row);
 
-        int input = valid_input(column, row);
+        int input = valid_input(column, row, *game1->player1->map);
         if (input == -1) {
 
             return;
@@ -191,6 +192,7 @@ void multiplayer_round (game* game1) {
         }
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
+            Sleep(1500);
             multiplayer_round(game1);
             return;
         }
@@ -274,10 +276,11 @@ void single_player_round(game* game1) {
         display_scores(game1);
         draw(*game1->player2->map);
         printf("%s, your turn : ", game1->player1->name);
+
         scanf("%d%c", &column, &row);
         row = toupper(row);
 
-        int input = valid_input(column, row);
+        int input = valid_input(column, row, *game1->player2->map);
         if (input == -1) {
 
             return;
@@ -288,6 +291,7 @@ void single_player_round(game* game1) {
         }
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
+            Sleep(1500);
             multiplayer_round(game1);
             return;
         }
