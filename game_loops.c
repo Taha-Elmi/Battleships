@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <windows.h>
+#include <conio.h>
 
 int valid_input(int column, char row) {
     row -= 64;
@@ -94,6 +95,10 @@ void check_ships(game *game1, ship** ship1, map* map1) {
     }
 }
 
+void display_scores(game* game1) {
+    printf("\t%s: %d\t%s: %d\n", game1->player1->name, game1->current_score_1, game1->player2->name, game1->current_score_2);
+}
+
 int check_end(game* game1) {
     if (game1->player1->ships == NULL)
         return 2;
@@ -127,6 +132,7 @@ void multiplayer_round (game* game1) {
     if (game1->turn == 1) {
 
         system("cls");
+        display_scores(game1);
         draw(*game1->player2->map);
         printf("%s, your turn : ", game1->player1->name);
         scanf("%d%c", &column, &row);
@@ -150,13 +156,15 @@ void multiplayer_round (game* game1) {
         fire(game1, game1->player2->map, column, row);
         check_ships(game1, &game1->player2->ships, game1->player2->map);
         system("cls");
+        display_scores(game1);
         draw(*game1->player2->map);
-        Sleep(2000);
+        getch();
 
         game1->turn = 2;
     } else {
 
         system("cls");
+        display_scores(game1);
         draw(*game1->player1->map);
         printf("%s, your turn : ", game1->player2->name);
         scanf("%d%c", &column, &row);
@@ -180,8 +188,9 @@ void multiplayer_round (game* game1) {
         fire(game1, game1->player1->map, column, row);
         check_ships(game1, &game1->player1->ships, game1->player1->map);
         system("cls");
+        display_scores(game1);
         draw(*game1->player1->map);
-        Sleep(2000);
+        getch();
 
         game1->turn = 1;
     }
