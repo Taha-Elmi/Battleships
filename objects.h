@@ -48,8 +48,10 @@ typedef struct {
     enum game_mode game_mode;
     player* player1;
     int current_score_1;
+    int rocket_1;
     player* player2;
     int current_score_2;
+    int rocket_2;
     int is_saved;
     int turn;
 } game;

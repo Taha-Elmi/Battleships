@@ -4,12 +4,14 @@
 
 #include "objects.h"
 #include "ui.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
 #include <windows.h>
+#include <conio.h>
 
 int map_size = 10;
 int number_of_ships = 10;
@@ -463,6 +465,29 @@ game* setup_multi_game(player* player1, player* player2) {
     else
         auto_get_list(&player2->ships, player2->map);
 
+
+    //here we set rocket option
+    if (player1->score >= 100) {
+        game1->rocket_1 = 1;
+        printf("%s, you can use your rocket once in the game :)\n\n", player1->name);
+    }
+    else {
+        game1->rocket_1 = 0;
+        printf("%s, you cannot use any rocket because of lack of points :(\n\n", player1->name);
+    }
+
+    if (player2->score >= 100) {
+        game1->rocket_2 = 1;
+        printf("%s, you can use your rocket once in the game :)\n\n", player2->name);
+    }
+    else {
+        game1->rocket_2 = 0;
+        printf("%s, you cannot use any rocket because of lack of points :(\n\n", player2->name);
+    }
+
+    printf("Press any key to start the game !");
+    getch();
+
     game1->is_saved = 0;
     game1->turn = 1;
 
@@ -492,6 +517,19 @@ game* setup_single_game(player* player1) {
     game1->current_score_2 = 0;
     game1->player2 = bot;
     auto_get_list(&bot->ships, bot->map);
+
+    //here we set rocket option
+    if (player1->score >= 100) {
+        game1->rocket_1 = 1;
+        printf("%s, you can use your rocket once in the game :)\n\n", player1->name);
+    }
+    else {
+        game1->rocket_1 = 0;
+        printf("%s, you cannot use any rocket because of lack of points :(\n\n", player1->name);
+    }
+
+    printf("Press any key to start the game !");
+    getch();
 
     game1->is_saved = 0;
     game1->turn = 1;

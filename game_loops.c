@@ -44,6 +44,59 @@ void fire(game* game1, map* map1, int column, char row) {
     }
 }
 
+void rocket(game* game1) {
+    int column;
+    char row;
+    player *current_player = (game1->turn == 1) ? game1->player1 : game1->player2;
+    player *opponent_player = (game1->turn == 1) ? game1->player2 : game1->player1;
+
+    map* map1 = (game1->turn == 1) ? game1->player2->map : game1->player1->map;
+    
+    printf("Which direction?\n1. vertical\n2. horizontal\n");
+    int choice;
+    scanf("%d", &choice);
+    switch (choice) {
+        case 1:
+            printf("Which column?\n");
+            scanf("%d", &column);
+            for (row = 'A'; row < (char )('A' + game1->player1->map->size); ++row) {
+                fire(game1, map1, column, row);
+                check_ships(game1, &opponent_player->ships, map1);
+                system("cls");
+                display_scores(game1);
+                draw(*map1);
+                Sleep(1000);
+                if (map1->board[column - 1][(int )row - 65].situation != Water)
+                    break;
+            }
+            break;
+
+        case 2:
+            printf("Which row?\n");
+            scanf("%c", &row);
+            row = toupper(row);
+            for (column = 1; column < (1 + map1->size); ++column) {
+                fire(game1, map1, column, row);
+                check_ships(game1, &opponent_player->ships, map1);
+                system("cls");
+                display_scores(game1);
+                draw(*map1);
+                Sleep(1000);
+                if (map1->board[column - 1][(int )row - 65].situation != Water)
+                    break;
+            }
+            break;
+
+        default:
+            printf("Invalid input. Try again.\n");
+            rocket(game1);
+            return;
+    }
+
+    (game1->turn == 1) ? (game1->rocket_1 --) : (game1->rocket_2 --);
+    (game1->turn == 1) ? (game1->turn = 2) : (game1->turn = 1);
+}
+
 int score_of_ships (int ship_size) {
     int max_score = 5 * ship_sizes[0];
     return (max_score / ship_size);
@@ -162,10 +215,18 @@ void multiplayer_round (game* game1) {
             save_game(*game1);
             return;
         }
-        if (input == -2) {
 
+        if (input == -2) {
+            if (game1->rocket_1 == 0) {
+                printf("Sorry :( You don't have any rocket to use.\n");
+                Sleep(1500);
+                multiplayer_round(game1);
+                return;
+            }
+            rocket(game1);
             return;
         }
+
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
             Sleep(1500);
@@ -191,13 +252,21 @@ void multiplayer_round (game* game1) {
 
         int input = valid_input(column, row, *game1->player1->map);
         if (input == -1) {
-
+            save_game(*game1);
             return;
         }
+
         if (input == -2) {
-
+            if (game1->rocket_2 == 0) {
+                printf("Sorry :( You don't have any rocket to use.\n");
+                Sleep(1500);
+                multiplayer_round(game1);
+                return;
+            }
+            rocket(game1);
             return;
         }
+
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
             Sleep(1500);
@@ -294,7 +363,13 @@ void single_player_round(game* game1) {
             return;
         }
         if (input == -2) {
-
+            if (game1->rocket_1 == 0) {
+                printf("Sorry :( You don't have any rocket to use.\n");
+                Sleep(1500);
+                multiplayer_round(game1);
+                return;
+            }
+            rocket(game1);
             return;
         }
         if (input == 0){
