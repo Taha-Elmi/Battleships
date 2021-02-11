@@ -72,7 +72,7 @@ void auto_get_list(ship** list, map* map1);
 void pop_ship(ship** list, ship* ship1);
 void creat_board(map* map1, int size);
 void setup_player(player **list);
-void sort_players(player* list);
+void sort_players();
 int search_name(char name[]);
 game* setup_multi_game(player* player1, player* player2);
 game* setup_single_game(player* player1);

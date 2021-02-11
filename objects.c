@@ -57,7 +57,7 @@ void change_ship_sizes(int **ship_sizes, int new_number_of_ships) {
     (*ship_sizes) = (int *)realloc((*ship_sizes), number_of_ships * sizeof(int ));
     int input;
     for (int i = 0; i < number_of_ships; ++i) {
-        printf("Enter ship n.%d's size: ", i + 1);
+        printf("Enter ship N.%d's size: ", i + 1);
         scanf("%d", &input);
         (*ship_sizes)[i] = input;
     }
@@ -429,10 +429,10 @@ void swap_players(player* a, player* b) {
     *b = temp;
 }
 
-void sort_players(player* list) {
+void sort_players() {
     for (int i = (number_of_players - 1); i > 0 ; --i) {
         for (int j = 0; j < i; ++j) {
-            if (list[j].score < list[j+1].score)
+            if (players[j].score < players[j+1].score)
                 swap_players(&players[j], &players[j+1]);
         }
     }

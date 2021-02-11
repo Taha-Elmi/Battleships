@@ -4,6 +4,8 @@
 
 #include "ui.h"
 #include "game_loops.h"
+#include "filing.h"
+
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
@@ -282,7 +284,7 @@ void menu_6() {
     system("cls");
     printf("\t      BATTLESHIPS\n\t<developed by Taha Elmi>\n\n");
 
-    sort_players(players);
+    sort_players();
     for (int i = 0; i < number_of_players; ++i)
         printf("%d. %s\twith %d points\n", i + 1, players[i].name, players[i].score);
     printf("\nPress any key to exit\n");
@@ -316,9 +318,12 @@ int menu() {
             menu_6();
             return 6;
         case 7:
+            sort_players();
+            save_players();
             return 0;
         default:
             printf("Invalid input. Choose a valid option.\n");
+            Sleep(1500);
             return menu();
     }
 }
