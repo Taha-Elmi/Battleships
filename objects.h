@@ -64,6 +64,7 @@ extern player *bot;
 //functions
 void set_ship_sizes(int **ship_sizes, int number_of_ships, ...);
 void change_ship_sizes(int **ship_sizes, int number_of_ships);
+void change_map_size(int new_size);
 void get_list(ship** list, map* map1);
 void auto_get_list(ship** list, map* map1);
 void pop_ship(ship** list, ship* ship1);

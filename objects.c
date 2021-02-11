@@ -64,6 +64,10 @@ void change_ship_sizes(int **ship_sizes, int new_number_of_ships) {
     sort_ship_sizes();
 }
 
+void change_map_size(int new_size) {
+    map_size = new_size;
+}
+
 void creat_board(map* map1, int size) {
     map1->size = size;
     map1->board = (location **)calloc(size, sizeof(location *));
@@ -348,7 +352,6 @@ void setup_player(player **list) {
         (*list) = (player *)realloc((*list), (number_of_players + 1) * sizeof(player));
     }
 
-    (*list)[number_of_players].ships = NULL;
     fflush(stdin);
     printf("Enter your name: ");
     gets((*list)[number_of_players].name);
@@ -367,6 +370,7 @@ void setup_player(player **list) {
     strcpy((*list)[number_of_players].name, temp_name);
 
     (*list)[number_of_players].score = 0;
+    (*list)[number_of_players].ships = NULL;
     number_of_players++;
 }
 
