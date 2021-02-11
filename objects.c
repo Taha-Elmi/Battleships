@@ -57,7 +57,7 @@ void change_ship_sizes(int **ship_sizes, int new_number_of_ships) {
     (*ship_sizes) = (int *)realloc((*ship_sizes), number_of_ships * sizeof(int ));
     int input;
     for (int i = 0; i < number_of_ships; ++i) {
-        printf("Enter ship n.%d's size: ", i);
+        printf("Enter ship n.%d's size: ", i + 1);
         scanf("%d", &input);
         (*ship_sizes)[i] = input;
     }
@@ -201,9 +201,11 @@ void get_ship(ship* ship1, int size, map* map1) {
     ship1->next = NULL;
 }
 
-void get_list(ship** list, map* map1) {
+void get_list(ship** list, map* map1, char* name) {
+    system("cls");
     for (int i = 0; i < number_of_ships; ++i) {
         ship temp;
+        printf("%s's map:\n", name);
         raw_draw(*map1);
         get_ship(&temp, ship_sizes[i], map1);
         insert_ship(list, temp);
@@ -398,14 +400,14 @@ game* setup_multi_game(player* player1, player* player2) {
     player1->map = map1;
     game1->current_score_1 = 0;
     game1->player1 = player1;
-    get_list(&player1->ships, player1->map);
+    get_list(&player1->ships, player1->map, player1->name);
 
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
     player2->map = map2;
     game1->current_score_2 = 0;
     game1->player2 = player2;
-    get_list(&player2->ships, player2->map);
+    get_list(&player2->ships, player2->map, player2->name);
 
     game1->turn = 1;
 
