@@ -100,7 +100,54 @@ void swap_locations(location* a, location* b) {
     *b = temp;
 }
 
+void get_ship_size_1(ship* ship1, map* map1) {
+    ship1->size = 1;
+    short column;
+    char row;
+
+    printf("Set the area of a ship with size 1\n");
+
+    printf("Where's the ship's only coordinate (example: 1a) ? ");
+
+    fflush(stdin);
+    scanf("%d%c", &column, &row);
+    row = toupper(row);
+    if (isalpha(row) == 0) {
+        printf("Invalid input :/ Try again\n");
+        get_ship_size_1(ship1, map1);
+        return;
+    }
+    ship1->top_left.x = column - 1;
+    ship1->top_left.y = (int )row - 65;
+    if (ship1->top_left.x < 0 || ship1->top_left.y < 0 || ship1->top_left.x >= map_size || ship1->top_left.y >= map_size) {
+        printf("Invalid inputs :/\n");
+        get_ship_size_1(ship1, map1);
+        return;
+    }
+    ship1->bottom_right = ship1->top_left;
+
+    //here we check if the area that the player chose is empty
+    for (int i = ship1->top_left.x - 1; i <= ship1->bottom_right.x + 1; ++i) {
+        for (int j = ship1->top_left.y - 1; j <= ship1->bottom_right.y + 1; ++j) {
+            if ((i >= 0) && (i < map_size) && (j >= 0) && (j < map_size) && (map1->board[i][j].situation != empty)) {
+                printf("The area you chose or the adjoining area was not completely empty.\n");
+                get_ship_size_1(ship1, map1);
+                return;
+            }
+        }
+    }
+
+    map1->board[ship1->top_left.x][ship1->top_left.y].situation = full;
+    ship1->next = NULL;
+
+}
+
 void get_ship(ship* ship1, int size, map* map1) {
+    if (size == 1) {
+        get_ship_size_1(ship1, map1);
+        return;
+    }
+
     ship1->size = size;
     short column;
     char row;
