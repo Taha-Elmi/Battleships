@@ -73,6 +73,7 @@ void rocket(game* game1) {
 
         case 2:
             printf("Which row?\n");
+            fflush(stdin);
             scanf("%c", &row);
             row = toupper(row);
             for (column = 1; column < (1 + map1->size); ++column) {
@@ -93,6 +94,7 @@ void rocket(game* game1) {
             return;
     }
 
+    current_player->score -= 100;
     (game1->turn == 1) ? (game1->rocket_1 --) : (game1->rocket_2 --);
     (game1->turn == 1) ? (game1->turn = 2) : (game1->turn = 1);
 }
@@ -207,16 +209,15 @@ void multiplayer_round (game* game1) {
         display_scores(game1);
         draw(*game1->player2->map);
         printf("%s, your turn : ", game1->player1->name);
-        scanf("%d%c", &column, &row);
-        row = toupper(row);
 
-        int input = valid_input(column, row, *game1->player2->map);
-        if (input == -1) {
+        scanf("%d", &column);
+
+        if (column == -1) {
             save_game(*game1);
             return;
         }
 
-        if (input == -2) {
+        if (column == -2) {
             if (game1->rocket_1 == 0) {
                 printf("Sorry :( You don't have any rocket to use.\n");
                 Sleep(1500);
@@ -226,6 +227,10 @@ void multiplayer_round (game* game1) {
             rocket(game1);
             return;
         }
+
+        scanf("%c", &row);
+        row = toupper(row);
+        int input = valid_input(column, row, *game1->player2->map);
 
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
@@ -247,16 +252,15 @@ void multiplayer_round (game* game1) {
         display_scores(game1);
         draw(*game1->player1->map);
         printf("%s, your turn : ", game1->player2->name);
-        scanf("%d%c", &column, &row);
-        row = toupper(row);
 
-        int input = valid_input(column, row, *game1->player1->map);
-        if (input == -1) {
+        scanf("%d%c", &column);
+
+        if (column == -1) {
             save_game(*game1);
             return;
         }
 
-        if (input == -2) {
+        if (column == -2) {
             if (game1->rocket_2 == 0) {
                 printf("Sorry :( You don't have any rocket to use.\n");
                 Sleep(1500);
@@ -266,6 +270,10 @@ void multiplayer_round (game* game1) {
             rocket(game1);
             return;
         }
+
+        scanf("%c", &row);
+        row = toupper(row);
+        int input = valid_input(column, row, *game1->player1->map);
 
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
@@ -354,15 +362,13 @@ void single_player_round(game* game1) {
         draw(*game1->player2->map);
         printf("%s, your turn : ", game1->player1->name);
 
-        scanf("%d%c", &column, &row);
-        row = toupper(row);
+        scanf("%d", &column);
 
-        int input = valid_input(column, row, *game1->player2->map);
-        if (input == -1) {
+        if (column == -1) {
             save_game(*game1);
             return;
         }
-        if (input == -2) {
+        if (column == -2) {
             if (game1->rocket_1 == 0) {
                 printf("Sorry :( You don't have any rocket to use.\n");
                 Sleep(1500);
@@ -372,6 +378,10 @@ void single_player_round(game* game1) {
             rocket(game1);
             return;
         }
+
+        scanf("%c", &row);
+        row = toupper(row);
+        int input = valid_input(column, row, *game1->player2->map);
         if (input == 0){
             printf("Invalid input. Choose a block or use jet power or save the game\n");
             Sleep(1500);

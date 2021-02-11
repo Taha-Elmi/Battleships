@@ -467,13 +467,14 @@ game* setup_multi_game(player* player1, player* player2) {
 
 
     //here we set rocket option
+    system("cls");
     if (player1->score >= 100) {
         game1->rocket_1 = 1;
-        printf("%s, you can use your rocket once in the game :)\n\n", player1->name);
+        printf("\n%s, you can use your rocket once in the game :)\n\n", player1->name);
     }
     else {
         game1->rocket_1 = 0;
-        printf("%s, you cannot use any rocket because of lack of points :(\n\n", player1->name);
+        printf("\n%s, you cannot use any rocket because of lack of points :(\n\n", player1->name);
     }
 
     if (player2->score >= 100) {
@@ -485,7 +486,7 @@ game* setup_multi_game(player* player1, player* player2) {
         printf("%s, you cannot use any rocket because of lack of points :(\n\n", player2->name);
     }
 
-    printf("Press any key to start the game !");
+    printf("Press any key to start the game ! ");
     getch();
 
     game1->is_saved = 0;
@@ -519,13 +520,14 @@ game* setup_single_game(player* player1) {
     auto_get_list(&bot->ships, bot->map);
 
     //here we set rocket option
+    system("cls");
     if (player1->score >= 100) {
         game1->rocket_1 = 1;
-        printf("%s, you can use your rocket once in the game :)\n\n", player1->name);
+        printf("\n%s, you can use your rocket once in the game :)\n\n", player1->name);
     }
     else {
         game1->rocket_1 = 0;
-        printf("%s, you cannot use any rocket because of lack of points :(\n\n", player1->name);
+        printf("\n%s, you cannot use any rocket because of lack of points :(\n\n", player1->name);
     }
 
     printf("Press any key to start the game !");
