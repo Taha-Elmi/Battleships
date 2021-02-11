@@ -28,6 +28,11 @@ typedef struct {
     ship ship1;
 } ship_to_save;
 
+typedef struct {
+    char game_name[20];
+    location location1;
+} map_to_save;
+
 void save_players();
 void load_players();
 void save_game(game game1);

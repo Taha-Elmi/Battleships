@@ -84,6 +84,27 @@ void save_game(game game1) {
         game1.player2->ships = game1.player2->ships->next;
     }
     fclose(ships_file);
+
+    FILE *maps_file;
+    maps_file = fopen("maps.bin", "ab");
+    //for one x, write every y
+    for (int i = 0; i < game1.player1->map->size; ++i) {
+        for (int j = 0; j < game1.player1->map->size; ++j) {
+            map_to_save temp_map;
+            strcpy(temp_map.game_name, tmp.name);
+            temp_map.location1 = game1.player1->map->board[i][j];
+            fwrite(&temp_map, 1, sizeof(map_to_save), maps_file);
+        }
+    }
+    for (int i = 0; i < game1.player2->map->size; ++i) {
+        for (int j = 0; j < game1.player2->map->size; ++j) {
+            map_to_save temp_map;
+            strcpy(temp_map.game_name, tmp.name);
+            temp_map.location1 = game1.player2->map->board[i][j];
+            fwrite(&temp_map, 1, sizeof(map_to_save), maps_file);
+        }
+    }
+    fclose(maps_file);
 }
 
 void update_files() {
@@ -91,11 +112,15 @@ void update_files() {
     games_file = fopen("games.bin", "rb");
     FILE *ships_file;
     ships_file = fopen("ships.bin", "rb");
+    FILE *maps_file;
+    maps_file = fopen("maps.bin", "rb");
 
     FILE *temp_games_file;
     temp_games_file = fopen("tmpgames.bin", "wb");
     FILE *temp_ships_file;
     temp_ships_file = fopen("tmpships.bin", "wb");
+    FILE *temp_maps_file;
+    temp_maps_file = fopen("tmpmaps.bin", "wb");
 
     while (1) {
         game_to_save temp_game;
@@ -105,7 +130,11 @@ void update_files() {
             break;
 
         if (temp_game.game_status) {
+
+            //write game to temp file
             fwrite(&temp_game, 1, sizeof(game_to_save), temp_games_file);
+
+            //write ships to temp file
             for (int i = 0; i < temp_game.ships_number_1; ++i) {
                 ship_to_save temp_ship;
                 fread(&temp_ship, 1, sizeof(ship_to_save), ships_file);
@@ -116,22 +145,36 @@ void update_files() {
                 fread(&temp_ship, 1, sizeof(ship_to_save), temp_ships_file);
                 fwrite(&temp_ship, 1, sizeof(ship_to_save), temp_ships_file);
             }
+
+            //write maps to temp file
+            for (int i = 0; i < (temp_game.map1.size * temp_game.map1.size); ++i) {
+                map_to_save temp_map;
+                fread(&temp_map, 1, sizeof(map_to_save), maps_file);
+                fwrite(&temp_map, 1, sizeof(map_to_save), maps_file);
+            }
+
         } else {
             fseek(ships_file, (temp_game.ships_number_1 + temp_game.ships_number_2) * sizeof(ship_to_save), SEEK_CUR);
+            fseek(maps_file, (temp_game.map1.size * temp_game.map1.size) * sizeof(map_to_save), SEEK_CUR);
         }
 
     }
 
     fclose(games_file);
     fclose(ships_file);
+    fclose(maps_file);
     fclose(temp_games_file);
     fclose(temp_ships_file);
+    fclose(temp_maps_file);
 
     games_file = fopen("games.bin", "wb");
     ships_file = fopen("ships.bin", "wb");
+    maps_file = fopen("maps.bin", "wb");
     temp_games_file = fopen("tmpgames.bin", "rb");
     temp_ships_file = fopen("tmpships.bin", "rb");
+    temp_maps_file = fopen("tmpmaps.bin", "rb");
 
+    //write game
     while (1) {
         game_to_save temp;
         fread(&temp, 1, sizeof(game_to_save), temp_games_file);
@@ -139,6 +182,7 @@ void update_files() {
             break;
         fwrite(&temp, 1, sizeof(game_to_save), games_file);
     }
+    //write ships
     while (1) {
         ship_to_save temp;
         fread(&temp, 1, sizeof(ship_to_save ), temp_ships_file);
@@ -146,11 +190,21 @@ void update_files() {
             break;
         fwrite(&temp, 1, sizeof(ship_to_save ), ships_file);
     }
+    //write maps
+    while (1) {
+        map_to_save temp;
+        fread(&temp, 1, sizeof(map_to_save ), temp_maps_file);
+        if (feof(temp_maps_file))
+            break;
+        fwrite(&temp, 1, sizeof(map_to_save ), maps_file);
+    }
 
     fclose(games_file);
     fclose(ships_file);
+    fclose(maps_file);
     fclose(temp_games_file);
     fclose(temp_ships_file);
+    fclose(temp_maps_file);
 }
 
 int list_of_games () {
