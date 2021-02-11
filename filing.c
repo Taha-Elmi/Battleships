@@ -182,11 +182,23 @@ game* load_game(int number) {
     game *game1 = (game*)malloc(sizeof(game));
     *game1 = load.game1;
     game1->player1 = &players[search_name(load.player1)];
-    game1->player2 = &players[search_name(load.player2)];
+
+    if (load.game1.game_mode == multi)
+        game1->player2 = &players[search_name(load.player2)];
+    else {
+        bot = (player *) malloc(sizeof(player));
+        strcpy(bot->name, "Bot");
+        game1->player2 = bot;
+    }
+
     map *map1 = (map*)malloc(sizeof(map));
+    creat_board(map1, load.map1.size);
     *map1 = load.map1;
+
     map *map2 = (map*)malloc(sizeof(map));
+    creat_board(map2, load.map2.size);
     *map2 = load.map2;
+
     game1->player1->map = map1;
     game1->player2->map = map2;
     game1->player1->ships = NULL;

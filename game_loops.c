@@ -4,6 +4,8 @@
 
 #include "game_loops.h"
 #include "ui.h"
+#include "filing.h"
+
 #include <stdio.h>
 #include <ctype.h>
 #include <windows.h>
@@ -104,20 +106,26 @@ int check_end(game* game1) {
         return 2;
     if (game1->player2->ships == NULL)
         return 1;
+    if (game1->is_saved == 1)
+        return -1;
     return 0;
 }
 
 void finish_game(game* game1, int winner) {
     system("cls");
-    if (winner == 1) {
-        printf("%s won the game :)\n", game1->player1->name);
-        game1->player1->score += game1->current_score_1;
-        game1->player2->score += (game1->current_score_2 / 2);
-    } else {
-        printf("%s won the game :)\n", game1->player2->name);
-        game1->player2->score += game1->current_score_2;
-        game1->player1->score += (game1->current_score_2 / 2);
+    switch (winner) {
+        case 1:
+            printf("%s won the game :)\n", game1->player1->name);
+            game1->player1->score += game1->current_score_1;
+            game1->player2->score += (game1->current_score_2 / 2);
+            break;
+        case 2:
+            printf("%s won the game :)\n", game1->player2->name);
+            game1->player2->score += game1->current_score_2;
+            game1->player1->score += (game1->current_score_2 / 2);
+            break;
     }
+
     free(game1->player1->map);
     free(game1->player1->ships);
     game1->player1->ships = NULL;
@@ -151,7 +159,7 @@ void multiplayer_round (game* game1) {
 
         int input = valid_input(column, row, *game1->player2->map);
         if (input == -1) {
-
+            save_game(*game1);
             return;
         }
         if (input == -2) {
@@ -282,7 +290,7 @@ void single_player_round(game* game1) {
 
         int input = valid_input(column, row, *game1->player2->map);
         if (input == -1) {
-
+            save_game(*game1);
             return;
         }
         if (input == -2) {

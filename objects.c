@@ -84,6 +84,7 @@ void creat_board(map* map1, int size) {
 void insert_ship(ship **list, ship new_ship){
     ship* p_new_ship = (ship*)malloc(sizeof(ship));
     (*p_new_ship) = new_ship;
+    p_new_ship->next = NULL;
     if (*list == NULL) {
         *list = p_new_ship;
         return;
@@ -245,7 +246,6 @@ void get_ship(ship* ship1, int size, map* map1) {
 
     }
 
-    ship1->next = NULL;
 }
 
 void get_list(ship** list, map* map1, char* name) {
@@ -359,7 +359,6 @@ void auto_get_ship(ship* ship1, int size, map* map1) {
             break;
     }
 
-    ship1->next = NULL;
 }
 
 void auto_get_list(ship** list, map* map1) {
