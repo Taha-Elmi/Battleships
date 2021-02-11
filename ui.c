@@ -63,6 +63,9 @@ void raw_draw(map map1) {
 }
 
 int choose_player() {
+    if (number_of_players == 0)
+        return -1;
+
     system("cls");
     printf("\t      BATTLESHIPS\n\t<developed by Taha Elmi>\n\n");
     for (int i = 0; i < number_of_players; ++i)
@@ -94,6 +97,12 @@ void menu_1() {
     switch (choice) {
         case 1:
             index_player1 = choose_player();
+            if (index_player1 == -1) {
+                printf("There is no user to choose yet. Creat one.\n");
+                Sleep(2000);
+                menu_1();
+                return;
+            }
             break;
         case 2:
             setup_player(&players);
@@ -136,6 +145,12 @@ void menu_1() {
     switch (choice) {
         case 1:
             index_player2 = choose_player();
+            if (index_player2 == -1) {
+                printf("There is no user to choose yet. Creat one.\n");
+                Sleep(2000);
+                menu_1();
+                return;
+            }
             break;
         case 2:
             setup_player(&players);
@@ -190,6 +205,12 @@ void menu_2() {
     switch (choice) {
         case 1:
             index_player = choose_player();
+            if (index_player == -1) {
+                printf("There is no user to choose yet. Creat one.\n");
+                Sleep(2000);
+                menu_2();
+                return;
+            }
             break;
         case 2:
             setup_player(&players);
@@ -225,6 +246,60 @@ void menu_2() {
     players[index_player].putting = how_player;
     game *game1 = setup_single_game(&players[index_player]);
     single_player(game1);
+}
+
+void menu_3() {
+    system("cls");
+    printf("\t      BATTLESHIPS\n\t<developed by Taha Elmi>\n\n");
+    update_files();
+    int n = list_of_games();
+
+    if (n == 0) {
+        printf("No file to load.");
+        Sleep(1500);
+        return;
+    }
+
+    int choice;
+    printf("Choose one file with the appropriate number: ");
+    scanf("%d", &choice);
+
+    if (choice < 1 || choice > n){
+        printf("Invalid input. Try again.\n");
+        Sleep(1500);
+        menu_3();
+        return;
+    }
+
+    game* game1 = load_game(n);
+    switch (game1->game_mode) {
+        case single:
+            single_player(game1);
+            return;
+        case multi:
+            multiplayer(game1);
+            return;
+    }
+}
+
+void menu_4() {
+    update_files();
+    int n = list_of_games();
+    system("cls");
+    if (n == 0) {
+        printf("No game to load.\n");
+        Sleep(1500);
+        return;
+    }
+    game *game1 = load_last_game();
+    switch (game1->game_mode) {
+        case single:
+            single_player(game1);
+            return;
+        case multi:
+            multiplayer(game1);
+            return;
+    }
 }
 
 void menu_5_1() {
@@ -311,6 +386,12 @@ int menu() {
         case 2:
             menu_2();
             return 2;
+        case 3:
+            menu_3();
+            return 3;
+        case 4:
+            menu_4();
+            return 4;
         case 5:
             menu_5();
             return 3;
@@ -320,6 +401,7 @@ int menu() {
         case 7:
             sort_players();
             save_players();
+            update_files();
             return 0;
         default:
             printf("Invalid input. Choose a valid option.\n");

@@ -250,6 +250,7 @@ void get_ship(ship* ship1, int size, map* map1) {
 
 void get_list(ship** list, map* map1, char* name) {
     system("cls");
+    (*list) = NULL;
     for (int i = 0; i < number_of_ships; ++i) {
         ship temp;
         printf("%s's map:\n", name);
@@ -362,6 +363,7 @@ void auto_get_ship(ship* ship1, int size, map* map1) {
 }
 
 void auto_get_list(ship** list, map* map1) {
+    (*list) = NULL;
     for (int i = 0; i < number_of_ships; ++i) {
         ship temp;
         auto_get_ship(&temp, ship_sizes[i], map1);
@@ -462,6 +464,7 @@ game* setup_multi_game(player* player1, player* player2) {
     else
         auto_get_list(&player2->ships, player2->map);
 
+    game1->is_saved = 0;
     game1->turn = 1;
 
     return game1;
@@ -491,7 +494,7 @@ game* setup_single_game(player* player1) {
     game1->player2 = bot;
     auto_get_list(&bot->ships, bot->map);
 
-
+    game1->is_saved = 0;
     game1->turn = 1;
 
     return game1;

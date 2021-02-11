@@ -50,6 +50,7 @@ typedef struct {
     int current_score_1;
     player* player2;
     int current_score_2;
+    int is_saved;
     int turn;
 } game;
 
@@ -69,6 +70,7 @@ void change_ship_sizes(int **ship_sizes, int number_of_ships);
 void change_map_size(int new_size);
 void get_list(ship** list, map* map1, char* name);
 void auto_get_list(ship** list, map* map1);
+void insert_ship(ship **list, ship new_ship);
 void pop_ship(ship** list, ship* ship1);
 void creat_board(map* map1, int size);
 void setup_player(player **list);
