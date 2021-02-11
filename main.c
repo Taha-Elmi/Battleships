@@ -1,10 +1,8 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 #include "objects.h"
 #include "ui.h"
-#include "game_loops.h"
 
 
 int main() {

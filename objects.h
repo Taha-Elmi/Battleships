@@ -11,6 +11,7 @@
 enum direction {horizental, vertical};
 enum situation {empty, full, Water, Explotion, Complete};
 enum game_mode {single, multi};
+enum putting {automatic, manually};
 
 
 //structs
@@ -40,6 +41,7 @@ typedef struct {
     int score;
     ship* ships;
     map* map;
+    enum putting putting;
 } player;
 
 typedef struct {
