@@ -114,7 +114,7 @@ void finish_game(game* game1, int winner) {
         game1->player1->score += game1->current_score_1;
         game1->player2->score += (game1->current_score_2 / 2);
     } else {
-        printf("%s won the game :)\n", game1->player1->name);
+        printf("%s won the game :)\n", game1->player2->name);
         game1->player2->score += game1->current_score_2;
         game1->player1->score += (game1->current_score_2 / 2);
     }
