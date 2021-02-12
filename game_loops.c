@@ -327,7 +327,7 @@ void multiplayer_round (game* game1) {
         draw(*game1->player1->map);
         printf("%s, your turn : ", game1->player2->name);
 
-        scanf("%d%c", &column);
+        scanf("%d", &column);
 
         if (column == -1) {
             save_game(*game1);
