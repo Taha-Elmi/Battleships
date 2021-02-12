@@ -51,11 +51,13 @@ typedef struct {
     int current_score_1;
     int rocket_1;
     map* copy_map1;
+    ship* copy_ships1;
 
     player* player2;
     int current_score_2;
     int rocket_2;
     map* copy_map2;
+    ship* copy_ships2;
 
     int *columns;
     char *rows;

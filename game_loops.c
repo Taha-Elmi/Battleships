@@ -239,6 +239,21 @@ void multiplayer_round (game* game1) {
             return;
         }
 
+        //for playback
+        game1->rounds++;
+        if (game1->columns == NULL)
+            game1->columns = (int *)malloc(sizeof(int ));
+        else
+            game1->columns = (int *)realloc(game1->columns, game1->rounds * sizeof(int));
+
+        if (game1->rows == NULL)
+            game1->rows = (char *)malloc(sizeof(char ));
+        else
+            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+        game1->columns[game1->rounds - 1] = column;
+        game1->rows[game1->rounds - 1] = row;
+
+
         fire(game1, game1->player2->map, column, row);
         check_ships(game1, &game1->player2->ships, game1->player2->map);
         system("cls");
@@ -281,6 +296,21 @@ void multiplayer_round (game* game1) {
             multiplayer_round(game1);
             return;
         }
+
+        //for playback
+        game1->rounds++;
+        if (game1->columns == NULL)
+            game1->columns = (int *)malloc(sizeof(int ));
+        else
+            game1->columns = (int *)realloc(game1->columns, game1->rounds * sizeof(int));
+
+        if (game1->rows == NULL)
+            game1->rows = (char *)malloc(sizeof(char ));
+        else
+            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+        game1->columns[game1->rounds - 1] = column;
+        game1->rows[game1->rounds - 1] = row;
+
 
         fire(game1, game1->player1->map, column, row);
         check_ships(game1, &game1->player1->ships, game1->player1->map);
@@ -389,6 +419,21 @@ void single_player_round(game* game1) {
             return;
         }
 
+        //for playback
+        game1->rounds++;
+        if (game1->columns == NULL)
+            game1->columns = (int *)malloc(sizeof(int ));
+        else
+            game1->columns = (int *)realloc(game1->columns, game1->rounds * sizeof(int));
+
+        if (game1->rows == NULL)
+            game1->rows = (char *)malloc(sizeof(char ));
+        else
+            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+        game1->columns[game1->rounds - 1] = column;
+        game1->rows[game1->rounds - 1] = row;
+
+
         fire(game1, game1->player2->map, column, row);
         check_ships(game1, &game1->player2->ships, game1->player2->map);
         system("cls");
@@ -407,6 +452,22 @@ void single_player_round(game* game1) {
             } while (game1->player1->map->board[guess.x][guess.y].situation != empty
                     && game1->player1->map->board[guess.x][guess.y].situation != full);
         }
+
+        //for playback
+        game1->rounds++;
+        if (game1->columns == NULL)
+            game1->columns = (int *)malloc(sizeof(int ));
+        else
+            game1->columns = (int *)realloc(game1->columns, game1->rounds * sizeof(int));
+
+        if (game1->rows == NULL)
+            game1->rows = (char *)malloc(sizeof(char ));
+        else
+            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+        game1->columns[game1->rounds - 1] = guess.x + 1;
+        game1->rows[game1->rounds - 1] = (char )(guess.y + 65);
+
+
         fire(game1, game1->player1->map, guess.x + 1, (char )(guess.y + 65));
         check_ships(game1, &game1->player1->ships, game1->player1->map);
         system("cls");
@@ -425,4 +486,17 @@ void single_player(game* game1) {
         end = check_end(game1);
     }
     finish_game(game1, end);
+}
+
+void playback(game* game1) {
+    game1->current_score_1 = 0;
+    game1->current_score_2 = 0;
+    for (int i = 0; i < game1->rounds; ++i) {
+        if ((i % 2) == 0) {
+            system("cls");
+            display_scores(game1);
+            draw(*game1->player2->map);
+            check_ships()
+        }
+    }
 }

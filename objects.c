@@ -373,6 +373,13 @@ void auto_get_ship(ship* ship1, int size, map* map1) {
 
 }
 
+void copy_list(ship* ship_d, ship* ship_s) {
+    while (ship_s != NULL) {
+        insert_ship(&ship_d, *ship_s);
+        ship_s = ship_s->next;
+    }
+}
+
 void auto_get_list(ship** list, map* map1) {
     (*list) = NULL;
     for (int i = 0; i < number_of_ships; ++i) {
@@ -457,6 +464,8 @@ game* setup_multi_game(player* player1, player* player2) {
     game1->columns = NULL;
     game1->rows = NULL;
     game1->rounds = 0;
+    game1->copy_ships1 = NULL;
+    game1->copy_ships2 = NULL;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
@@ -468,6 +477,7 @@ game* setup_multi_game(player* player1, player* player2) {
     else
         auto_get_list(&player1->ships, player1->map);
     game1->copy_map1 = copy_board(player1->map);
+    copy_list(game1->copy_ships1, game1->player1->ships);
 
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
@@ -479,6 +489,7 @@ game* setup_multi_game(player* player1, player* player2) {
     else
         auto_get_list(&player2->ships, player2->map);
     game1->copy_map2 = copy_board(player2->map);
+    copy_list(game1->copy_ships2, game1->player2->ships);
 
 
     //here we set rocket option
@@ -516,6 +527,8 @@ game* setup_single_game(player* player1) {
     game1->columns = NULL;
     game1->rows = NULL;
     game1->rounds = 0;
+    game1->copy_ships1 = NULL;
+    game1->copy_ships2 = NULL;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
@@ -527,6 +540,7 @@ game* setup_single_game(player* player1) {
     else
         auto_get_list(&player1->ships, player1->map);
     game1->copy_map1 = copy_board(player1->map);
+    copy_list(game1->copy_ships1, game1->player1->ships);
 
     bot = (player*)malloc(sizeof(player));
     strcpy(bot->name, "Bot");
@@ -538,6 +552,7 @@ game* setup_single_game(player* player1) {
     game1->player2 = bot;
     auto_get_list(&bot->ships, bot->map);
     game1->copy_map2 = copy_board(bot->map);
+    copy_list(game1->copy_ships2, bot->ships);
 
     //here we set rocket option
     system("cls");
