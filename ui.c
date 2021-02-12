@@ -48,8 +48,15 @@ void draw(map map1) {
 
 void raw_draw(map map1) {
     printf("   ");
-    for (int i = 0; i < map_size; ++i)
-        printf(" %d ", i + 1);
+    for (int i = 0; i < map_size; ++i) {
+
+        //we put this if to prevent disorder in drawing
+        if (i < 10)
+            printf(" %d ", i + 1);
+        else
+            printf(" %d", i + 1);
+
+    }
     printf("\n");
 
     for (int i = 0; i < map_size; ++i) {
