@@ -15,8 +15,8 @@ int valid_input(int column, char row, map map1) {
     row -= 64;
     if (column == -1 || column == -2)
         return column;
-    if (column > 0 && column <= map_size
-        && row > 0 && row <= map_size
+    if (column > 0 && column <= map1.size
+        && row > 0 && row <= map1.size
         && (map1.board[column - 1][row - 1].situation == empty
         || map1.board[column - 1][row - 1].situation == full))
         return 1;

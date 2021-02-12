@@ -12,14 +12,14 @@
 
 void draw(map map1) {
     printf("   ");
-    for (int i = 0; i < map_size; ++i)
+    for (int i = 0; i < map1.size; ++i)
         printf(" %d ", i + 1);
     printf("\n");
 
-    for (int i = 0; i < map_size; ++i) {
+    for (int i = 0; i < map1.size; ++i) {
         printf(" %c ", i + 65);
 
-        for (int j = 0; j < map_size; ++j) {
+        for (int j = 0; j < map1.size; ++j) {
             switch (map1.board[j][i].situation) {
                 case Water:
                     printf(" W ");
@@ -251,11 +251,10 @@ void menu_2() {
 void menu_3() {
     system("cls");
     printf("\t      BATTLESHIPS\n\t<developed by Taha Elmi>\n\n");
-    update_files();
     int n = list_of_games();
 
     if (n == 0) {
-        printf("No file to load.");
+        printf("No game to load.");
         Sleep(1500);
         return;
     }
@@ -275,17 +274,19 @@ void menu_3() {
     switch (game1->game_mode) {
         case single:
             single_player(game1);
+            update_files();
             return;
         case multi:
             multiplayer(game1);
+            update_files();
             return;
     }
 }
 
 void menu_4() {
-    update_files();
     int n = list_of_games();
     system("cls");
+    printf("\t      BATTLESHIPS\n\t<developed by Taha Elmi>\n\n");
     if (n == 0) {
         printf("No game to load.\n");
         Sleep(1500);
@@ -295,9 +296,11 @@ void menu_4() {
     switch (game1->game_mode) {
         case single:
             single_player(game1);
+            update_files();
             return;
         case multi:
             multiplayer(game1);
+            update_files();
             return;
     }
 }
