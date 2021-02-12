@@ -181,12 +181,23 @@ void finish_game(game* game1, int winner) {
             break;
     }
 
+    printf("Do you want to watch the playback of the match?\n"
+           "0. No\n1. Yes\n");
+    int choice;
+    scanf("%d", &choice);
+    if (choice)
+        playback(game1);
+
     free(game1->player1->map);
+    free(game1->copy_map1);
     free(game1->player1->ships);
+    free(game1->copy_ships1);
     game1->player1->ships = NULL;
     game1->player1->map = NULL;
     free(game1->player2->map);
+    free(game1->copy_map2);
     free(game1->player2->ships);
+    free(game1->copy_ships2);
     game1->player2->map = NULL;
     game1->player2->ships = NULL;
 
@@ -249,7 +260,7 @@ void multiplayer_round (game* game1) {
         if (game1->rows == NULL)
             game1->rows = (char *)malloc(sizeof(char ));
         else
-            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+            game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
         game1->columns[game1->rounds - 1] = column;
         game1->rows[game1->rounds - 1] = row;
 
@@ -307,7 +318,7 @@ void multiplayer_round (game* game1) {
         if (game1->rows == NULL)
             game1->rows = (char *)malloc(sizeof(char ));
         else
-            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+            game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
         game1->columns[game1->rounds - 1] = column;
         game1->rows[game1->rounds - 1] = row;
 
@@ -429,7 +440,7 @@ void single_player_round(game* game1) {
         if (game1->rows == NULL)
             game1->rows = (char *)malloc(sizeof(char ));
         else
-            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+            game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
         game1->columns[game1->rounds - 1] = column;
         game1->rows[game1->rounds - 1] = row;
 
@@ -463,7 +474,7 @@ void single_player_round(game* game1) {
         if (game1->rows == NULL)
             game1->rows = (char *)malloc(sizeof(char ));
         else
-            game1->columns = (char *)realloc(game1->columns, game1->rounds * sizeof(char ));
+            game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
         game1->columns[game1->rounds - 1] = guess.x + 1;
         game1->rows[game1->rounds - 1] = (char )(guess.y + 65);
 
@@ -495,29 +506,31 @@ void playback(game* game1) {
         if ((i % 2) == 0) {
             system("cls");
             display_scores(game1);
+            printf("\n%s's turn\n", game1->player1->name);
             draw(*game1->copy_map2);
-            printf("\n\t%s's turn", game1->player1->name);
             Sleep(1000);
             fire(game1, game1->copy_map2, game1->columns[i], game1->rows[i]);
             check_ships(game1, &game1->copy_ships2, game1->copy_map2);
             system("cls");
             display_scores(game1);
+            printf("\n%s's turn\n", game1->player1->name);
             draw(*game1->copy_map2);
-            printf("\n\t%s's turn", game1->player1->name);
-            Sleep(1000);
+            Sleep(1500);
+            game1->turn = 2;
         } else {
             system("cls");
             display_scores(game1);
+            printf("\n%s's turn\n", game1->player2->name);
             draw(*game1->copy_map1);
-            printf("\n\t%s's turn", game1->player2->name);
             Sleep(1000);
             fire(game1, game1->copy_map1, game1->columns[i], game1->rows[i]);
             check_ships(game1, &game1->copy_ships1, game1->copy_map1);
             system("cls");
             display_scores(game1);
+            printf("\n%s's turn\n", game1->player2->name);
             draw(*game1->copy_map1);
-            printf("\n\t%s's turn", game1->player2->name);
-            Sleep(1000);
+            Sleep(1500);
+            game1->turn = 1;
         }
     }
 }

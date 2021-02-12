@@ -20,3 +20,4 @@ void display_scores(game* game1);
 int check_finish(game game1);
 int score_of_ships (int ship_size);
 void finish_game(game* game1, int winner);
+void playback(game* game1);
