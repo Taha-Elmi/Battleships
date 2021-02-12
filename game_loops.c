@@ -66,6 +66,27 @@ void rocket(game* game1) {
                 display_scores(game1);
                 draw(*map1);
                 Sleep(1000);
+
+                //for playback
+                game1->rounds++;
+                if (game1->columns == NULL)
+                    game1->columns = (int *)malloc(sizeof(int ));
+                else
+                    game1->columns = (int *)realloc(game1->columns, game1->rounds * sizeof(int));
+
+                if (game1->rows == NULL)
+                    game1->rows = (char *)malloc(sizeof(char ));
+                else
+                    game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
+
+                if (game1->copy_turn == NULL)
+                    game1->copy_turn = (int *)malloc(sizeof(int ));
+                else
+                    game1->copy_turn = (int *)realloc(game1->copy_turn, game1->rounds * sizeof(int ));
+                game1->columns[game1->rounds - 1] = column;
+                game1->rows[game1->rounds - 1] = row;
+                game1->copy_turn[game1->rounds - 1] = game1->turn;
+
                 if (map1->board[column - 1][(int )row - 65].situation != Water)
                     break;
             }
@@ -83,6 +104,27 @@ void rocket(game* game1) {
                 display_scores(game1);
                 draw(*map1);
                 Sleep(1000);
+
+                //for playback
+                game1->rounds++;
+                if (game1->columns == NULL)
+                    game1->columns = (int *)malloc(sizeof(int ));
+                else
+                    game1->columns = (int *)realloc(game1->columns, game1->rounds * sizeof(int));
+
+                if (game1->rows == NULL)
+                    game1->rows = (char *)malloc(sizeof(char ));
+                else
+                    game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
+
+                if (game1->copy_turn == NULL)
+                    game1->copy_turn = (int *)malloc(sizeof(int ));
+                else
+                    game1->copy_turn = (int *)realloc(game1->copy_turn, game1->rounds * sizeof(int ));
+                game1->columns[game1->rounds - 1] = column;
+                game1->rows[game1->rounds - 1] = row;
+                game1->copy_turn[game1->rounds - 1] = game1->turn;
+
                 if (map1->board[column - 1][(int )row - 65].situation != Water)
                     break;
             }
@@ -261,8 +303,14 @@ void multiplayer_round (game* game1) {
             game1->rows = (char *)malloc(sizeof(char ));
         else
             game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
+
+        if (game1->copy_turn == NULL)
+            game1->copy_turn = (int *)malloc(sizeof(int ));
+        else
+            game1->copy_turn = (int *)realloc(game1->copy_turn, game1->rounds * sizeof(int ));
         game1->columns[game1->rounds - 1] = column;
         game1->rows[game1->rounds - 1] = row;
+        game1->copy_turn[game1->rounds - 1] = game1->turn;
 
 
         fire(game1, game1->player2->map, column, row);
@@ -319,8 +367,14 @@ void multiplayer_round (game* game1) {
             game1->rows = (char *)malloc(sizeof(char ));
         else
             game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
+
+        if (game1->copy_turn == NULL)
+            game1->copy_turn = (int *)malloc(sizeof(int ));
+        else
+            game1->copy_turn = (int *)realloc(game1->copy_turn, game1->rounds * sizeof(int ));
         game1->columns[game1->rounds - 1] = column;
         game1->rows[game1->rounds - 1] = row;
+        game1->copy_turn[game1->rounds - 1] = game1->turn;
 
 
         fire(game1, game1->player1->map, column, row);
@@ -441,8 +495,14 @@ void single_player_round(game* game1) {
             game1->rows = (char *)malloc(sizeof(char ));
         else
             game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
+
+        if (game1->copy_turn == NULL)
+            game1->copy_turn = (int *)malloc(sizeof(int ));
+        else
+            game1->copy_turn = (int *)realloc(game1->copy_turn, game1->rounds * sizeof(int ));
         game1->columns[game1->rounds - 1] = column;
         game1->rows[game1->rounds - 1] = row;
+        game1->copy_turn[game1->rounds - 1] = game1->turn;
 
 
         fire(game1, game1->player2->map, column, row);
@@ -475,8 +535,14 @@ void single_player_round(game* game1) {
             game1->rows = (char *)malloc(sizeof(char ));
         else
             game1->rows = (char *)realloc(game1->rows, game1->rounds * sizeof(char ));
+
+        if (game1->copy_turn == NULL)
+            game1->copy_turn = (int *)malloc(sizeof(int ));
+        else
+            game1->copy_turn = (int *)realloc(game1->copy_turn, game1->rounds * sizeof(int ));
         game1->columns[game1->rounds - 1] = guess.x + 1;
         game1->rows[game1->rounds - 1] = (char )(guess.y + 65);
+        game1->copy_turn[game1->rounds - 1] = game1->turn;
 
 
         fire(game1, game1->player1->map, guess.x + 1, (char )(guess.y + 65));
@@ -503,34 +569,38 @@ void playback(game* game1) {
     game1->current_score_1 = 0;
     game1->current_score_2 = 0;
     for (int i = 0; i < game1->rounds; ++i) {
-        if ((i % 2) == 0) {
-            system("cls");
-            display_scores(game1);
-            printf("\n%s's turn\n", game1->player1->name);
-            draw(*game1->copy_map2);
-            Sleep(1000);
-            fire(game1, game1->copy_map2, game1->columns[i], game1->rows[i]);
-            check_ships(game1, &game1->copy_ships2, game1->copy_map2);
-            system("cls");
-            display_scores(game1);
-            printf("\n%s's turn\n", game1->player1->name);
-            draw(*game1->copy_map2);
-            Sleep(1500);
-            game1->turn = 2;
-        } else {
-            system("cls");
-            display_scores(game1);
-            printf("\n%s's turn\n", game1->player2->name);
-            draw(*game1->copy_map1);
-            Sleep(1000);
-            fire(game1, game1->copy_map1, game1->columns[i], game1->rows[i]);
-            check_ships(game1, &game1->copy_ships1, game1->copy_map1);
-            system("cls");
-            display_scores(game1);
-            printf("\n%s's turn\n", game1->player2->name);
-            draw(*game1->copy_map1);
-            Sleep(1500);
-            game1->turn = 1;
+        switch (game1->copy_turn[i]) {
+            case 1:
+                game1->turn = 1;
+                system("cls");
+                display_scores(game1);
+                printf("\n%s's turn\n", game1->player1->name);
+                draw(*game1->copy_map2);
+                Sleep(1000);
+                fire(game1, game1->copy_map2, game1->columns[i], game1->rows[i]);
+                check_ships(game1, &game1->copy_ships2, game1->copy_map2);
+                system("cls");
+                display_scores(game1);
+                printf("\n%s's turn\n", game1->player1->name);
+                draw(*game1->copy_map2);
+                Sleep(1500);
+                break;
+            case 2:
+                game1->turn = 2;
+                system("cls");
+                display_scores(game1);
+                printf("\n%s's turn\n", game1->player2->name);
+                draw(*game1->copy_map1);
+                Sleep(1000);
+                fire(game1, game1->copy_map1, game1->columns[i], game1->rows[i]);
+                check_ships(game1, &game1->copy_ships1, game1->copy_map1);
+                system("cls");
+                display_scores(game1);
+                printf("\n%s's turn\n", game1->player2->name);
+                draw(*game1->copy_map1);
+                Sleep(1500);
+                break;
         }
+
     }
 }

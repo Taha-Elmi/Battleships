@@ -61,6 +61,7 @@ typedef struct {
 
     int *columns;
     char *rows;
+    int *copy_turn;
     int rounds;
     int is_saved;
     int turn;

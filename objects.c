@@ -466,6 +466,7 @@ game* setup_multi_game(player* player1, player* player2) {
     game1->rounds = 0;
     game1->copy_ships1 = NULL;
     game1->copy_ships2 = NULL;
+    game1->copy_turn = NULL;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
@@ -529,6 +530,7 @@ game* setup_single_game(player* player1) {
     game1->rounds = 0;
     game1->copy_ships1 = NULL;
     game1->copy_ships2 = NULL;
+    game1->copy_turn = NULL;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
