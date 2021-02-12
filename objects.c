@@ -454,6 +454,9 @@ void sort_players() {
 game* setup_multi_game(player* player1, player* player2) {
     game *game1 = (game*)malloc(sizeof(game));
     game1->game_mode = multi;
+    game1->columns = NULL;
+    game1->rows = NULL;
+    game1->rounds = 0;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
@@ -464,6 +467,7 @@ game* setup_multi_game(player* player1, player* player2) {
         get_list(&player1->ships, player1->map, player1->name);
     else
         auto_get_list(&player1->ships, player1->map);
+    game1->copy_map1 = copy_board(player1->map);
 
     map *map2 = (map *)malloc(sizeof(map));
     creat_board(map2, map_size);
@@ -474,6 +478,7 @@ game* setup_multi_game(player* player1, player* player2) {
         get_list(&player2->ships, player2->map, player2->name);
     else
         auto_get_list(&player2->ships, player2->map);
+    game1->copy_map2 = copy_board(player2->map);
 
 
     //here we set rocket option
@@ -508,6 +513,9 @@ game* setup_multi_game(player* player1, player* player2) {
 game* setup_single_game(player* player1) {
     game *game1 = (game*)malloc(sizeof(game));
     game1->game_mode = single;
+    game1->columns = NULL;
+    game1->rows = NULL;
+    game1->rounds = 0;
 
     map *map1 = (map *)malloc(sizeof(map));
     creat_board(map1, map_size);
@@ -518,6 +526,7 @@ game* setup_single_game(player* player1) {
         get_list(&player1->ships, player1->map, player1->name);
     else
         auto_get_list(&player1->ships, player1->map);
+    game1->copy_map1 = copy_board(player1->map);
 
     bot = (player*)malloc(sizeof(player));
     strcpy(bot->name, "Bot");
@@ -528,6 +537,7 @@ game* setup_single_game(player* player1) {
     game1->current_score_2 = 0;
     game1->player2 = bot;
     auto_get_list(&bot->ships, bot->map);
+    game1->copy_map2 = copy_board(bot->map);
 
     //here we set rocket option
     system("cls");
