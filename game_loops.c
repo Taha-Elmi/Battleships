@@ -495,8 +495,29 @@ void playback(game* game1) {
         if ((i % 2) == 0) {
             system("cls");
             display_scores(game1);
-            draw(*game1->player2->map);
-            check_ships()
+            draw(*game1->copy_map2);
+            printf("\n\t%s's turn", game1->player1->name);
+            Sleep(1000);
+            fire(game1, game1->copy_map2, game1->columns[i], game1->rows[i]);
+            check_ships(game1, &game1->copy_ships2, game1->copy_map2);
+            system("cls");
+            display_scores(game1);
+            draw(*game1->copy_map2);
+            printf("\n\t%s's turn", game1->player1->name);
+            Sleep(1000);
+        } else {
+            system("cls");
+            display_scores(game1);
+            draw(*game1->copy_map1);
+            printf("\n\t%s's turn", game1->player2->name);
+            Sleep(1000);
+            fire(game1, game1->copy_map1, game1->columns[i], game1->rows[i]);
+            check_ships(game1, &game1->copy_ships1, game1->copy_map1);
+            system("cls");
+            display_scores(game1);
+            draw(*game1->copy_map1);
+            printf("\n\t%s's turn", game1->player2->name);
+            Sleep(1000);
         }
     }
 }
