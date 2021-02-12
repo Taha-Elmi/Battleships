@@ -83,6 +83,16 @@ void creat_board(map* map1, int size) {
     }
 }
 
+map* copy_board(map* map1) {
+    map* map2 = (map*)malloc(sizeof(map));
+    creat_board(map2, map1->size);
+    for (int i = 0; i < map1->size; ++i) {
+        for (int j = 0; j < map1->size; ++j)
+            map2->board[i][j] = map1->board[i][j];
+    }
+    return map2;
+}
+
 void insert_ship(ship **list, ship new_ship){
     ship* p_new_ship = (ship*)malloc(sizeof(ship));
     (*p_new_ship) = new_ship;
